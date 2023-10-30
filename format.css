@@ -1,4 +1,8 @@
 p {
     color: rgb(33, 151, 86);
-    font-size: 14px;
+    font-size: 32px;
+}
+
+a{
+    color: rgb(47, 89, 228);
 }
