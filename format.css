@@ -1,9 +1,10 @@
-<style>
+
 h1{
     display:block;
     color:linen;
+    background-color: chocolate;
     font-size: 60px;
-    float:center;
+    align-items: center;
 }
 
 p {
@@ -39,4 +40,3 @@ li a:hover{
     background-color:gold;
 
 }
-</style>
