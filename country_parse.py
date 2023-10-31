@@ -1,6 +1,6 @@
 import os
 import string
-import csv
+import json
 
 class country():
      def __init__(self):
@@ -110,6 +110,16 @@ class country():
           return self.table
          
           
+def combine_dicts(list_dicts):
+     keys = list(list_dicts[0].keys())
+     mega_dict = {}
+     
+     for key in keys:
+          values_list = []
+          for diction in list_dicts:
+               values_list.append(diction[key])
+          mega_dict.update({key: values_list})
+     return mega_dict
 
 def remove_all(list_top, char):
      nlines = list_top.count(char)
@@ -146,13 +156,14 @@ def main():
             country_new.add_vals(lines)
             table = country_new.add_country()
             country_dicts.append(table)
- 
-        #https://docs.python.org/3/library/csv.html
-        south_america = open('12countries.csv', 'w', newline = '')
-        fieldnames = ['Country', 'Topics', 'Start', 'End', 'Categories', 'Actors', 'Summary', 'Issues specific to the country', 'Events', 'Memory Inititives', 'Sites of Memory', 'Organizations']
-        writer = csv.DictWriter(south_america, fieldnames = fieldnames)
-        writer.writeheader()
-        for table in country_dicts:
-             writer.writerow(table)
+
+        # https://www.geeksforgeeks.org/reading-and-writing-json-to-a-file-in-python/
+        countries_json = open('12Countries.json', 'w')
+        table = combine_dicts(country_dicts)
+        info_dump = json.dumps(table, indent= 1)
+        countries_json.write(info_dump)
+
+        
+
 
 main()
