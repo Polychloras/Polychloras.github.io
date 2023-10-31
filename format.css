@@ -6,3 +6,28 @@ p {
 a{
     color: rgb(47, 89, 228);
 }
+
+ul{
+    list-style-type: none;
+    margin : 0;
+    padding : 0;
+    overflow:hidden;
+    background-color: linen;
+}
+
+
+li{
+    float: left;
+}
+li a {
+    display:block;
+    color:brown;
+    text-align: center;
+    padding: 16px 16px;
+    text-decoration: none;
+}
+
+li a:hover{
+    background-color:gold;
+
+}
