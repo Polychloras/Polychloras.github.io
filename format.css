@@ -1,3 +1,11 @@
+<style>
+h1{
+    display:block;
+    color:linen;
+    font-size: 60px;
+    float:center;
+}
+
 p {
     color: rgb(33, 151, 86);
     font-size: 32px;
@@ -31,3 +39,4 @@ li a:hover{
     background-color:gold;
 
 }
+</style>
