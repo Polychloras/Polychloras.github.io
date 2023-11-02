@@ -121,10 +121,10 @@
                 
                 shadebox.append("rect")
                     .attr("x", margin.left)
-                    .attr("y", (d, i) => yScale(yPos[i]) - 2)
+                    .attr("y", (d, i) => yScale(yPos[i]) - 5)
                     .attr("width", width)
                     .attr("opacity", 0.25)
-                    .attr("height", barHeight + 5)
+                    .attr("height", barHeight + 10)
                     .attr("fill", function (d, i){ if((yPos[i]) % 2 == 0){return "grey"} else {return"White"}});
 
                 descrp.append("rect")
