@@ -38,7 +38,7 @@ class country():
           b = listed.index('Memory initiatives')
           for event in listed[a:b]:
                  year_event = event.split('-')
-                 self.timeline.update({year_event[1]:year_event[0]})
+                 self.timeline.update({event:year_event[0]})
           return b
 
      def set_meminit(self, listed, b):
@@ -108,18 +108,6 @@ class country():
           self.table.update({'Sites of Memory': self.get_memsites()})
           self.table.update({'Organizations': self.get_orgs()})
           return self.table
-         
-          
-def combine_dicts(list_dicts):
-     keys = list(list_dicts[0].keys())
-     mega_dict = {}
-     
-     for key in keys:
-          values_list = []
-          for diction in list_dicts:
-               values_list.append(diction[key])
-          mega_dict.update({key: values_list})
-     return mega_dict
 
 def remove_all(list_top, char):
      nlines = list_top.count(char)
@@ -158,9 +146,8 @@ def main():
             country_dicts.append(table)
 
         # https://www.geeksforgeeks.org/reading-and-writing-json-to-a-file-in-python/
-        countries_json = open('12Countries.json', 'w')
-        table = combine_dicts(country_dicts)
-        info_dump = json.dumps(table, indent= 1)
+        countries_json = open('12Data.json', 'w')
+        info_dump = json.dumps(country_dicts, indent= 1)
         countries_json.write(info_dump)
 
         
