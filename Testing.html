@@ -14,15 +14,14 @@
                             .attr("width", 2000)
                             .attr("height", 2000)
 
-            var nametags = canvas.selectAll("rect")
+            var nametags = canvas.selectAll("text")
                             .data(data)
                             .enter()
-                                .append("rect")
+                                .append("text")
                                 .attr("color", "Black")
-                                .attr("width", function(d){return d.Start})
-                                .attr("height", 10)
-                                .attr("y", function(d, i){return i + 15})
+                                .attr("y", function(d, i){return i * 15})
                                 .attr("x", 30)
+                                .text(function(d){return d.Country})
 
             });
     
