@@ -23,16 +23,16 @@
                 // Chart dimensions and configuration
                 const margin = ({ top: 10, right: 20, bottom: 50, left: 20 }); // Increase bottom margin
                 const width = 1000;
-
+                const index_wdth = 100;
                 // Bar height
                 const barHeight = 20;
-                    var direction = "center"
+                    var direction = "bottom"
                 // Calculate max of the End year and min of the Start year
-                const maxYear = Math.max(...data.map(d => d.End)) + 20;
-                const minYear = Math.min(...data.map(d => d.Start)) - 20;
+                const maxYear = Math.max(...data.map(d => d.End)) + 5;
+                const minYear = Math.min(...data.map(d => d.Start)) - 5;
 
                 // Compute the y position for each bar
-                const yPos = computeBarYPosition(data, direction);
+                const yPos = computeBarY(data, direction);
 
                 // Calculate the maximum yPos value and the height of the chart
                 const yPosMax = Math.max(...yPos);
@@ -41,8 +41,12 @@
                 const height = chartHeight + margin.top + margin.bottom;
 
                 // Create X and Y scales
-                const xScale = d3.scaleLinear().domain([minYear, maxYear]).range([margin.left, width - margin.right]);
-                const yScale = d3.scalePoint().domain(d3.range(yPosMin, yPosMax + 1)).range([height - margin.bottom, margin.top]).padding(1.5);
+                const xScale = d3.scaleLinear()
+                        .domain([minYear, maxYear])
+                        .range([margin.left + index_wdth, width - margin.right]);
+                const yScale = d3.scalePoint()
+                        .domain(d3.range(yPosMin, yPosMax + 1))
+                        .range([height - margin.bottom, margin.top]).padding(1.5);
 
                 // Create the chart
                 const svg = d3.select(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
@@ -73,12 +77,27 @@
                     .tickValues(d3.range(Math.floor(minYear / 20) * 20, maxYear, 20))
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                     .tickSizeOuter(0));
+                
+
+
+                // shade in boxes for easy identification
+                const shadebox = svg.append("g")
+                    .selectAll("g")
+                    .data(data)
+                    .join("g");
+
+               // Create indexs
+               const descrp = svg.append("g")
+                    .selectAll("g")
+                    .data(data)
+                    .join("g");
 
                 // Create bars and labels
                 const bars = svg.append("g")
                     .selectAll("g")
                     .data(data)
                     .join("g");
+                
 
                 // Create bars
                 bars.append("rect")
@@ -93,6 +112,33 @@
                     .text(d => d.Country)
                     .attr("x", d => xScale(d.Start) + 4)
                     .attr("y", (d, i) => yScale(yPos[i]) + barHeight / 2)
+                    .attr("alignment-baseline", "central")
+                    .attr("font-size", 12)
+                    .attr("fill", "white")
+                    .attr("white-space", "nowrap")
+                    // .attr("overflow", "hidden")
+                    .attr("text-overflow", "ellipsis");
+                
+                shadebox.append("rect")
+                    .attr("x", margin.left)
+                    .attr("y", (d, i) => yScale(yPos[i]) - 2)
+                    .attr("width", width)
+                    .attr("opacity", 0.25)
+                    .attr("height", barHeight + 5)
+                    .attr("fill", function (d, i){ if((yPos[i]) % 2 == 0){return "grey"} else {return"White"}});
+
+                descrp.append("rect")
+                    .attr("x", margin.left)
+                    .attr("y", (d, i) => yScale(yPos[i]))
+                    .attr("width", index_wdth)
+                    .attr("height", barHeight)
+                    .attr("fill", "steelblue");
+
+                // Create labels displaying only Country
+                descrp.append("text")
+                    .text(d => d.Country)
+                    .attr("x",margin.left + index_wdth/4)
+                    .attr("y", (d, i) => yScale(yPos[i]) + barHeight/2)
                     .attr("alignment-baseline", "central")
                     .attr("font-size", 12)
                     .attr("fill", "white")
@@ -137,6 +183,7 @@
                     .attr("text-anchor", "middle")
                     .attr("fill", "red"); // Display End date in red
 
+
                     // Scroll label if necessary
                     const label = bar.select("text");
                     const labelWidth = label.node().getComputedTextLength();
@@ -175,18 +222,14 @@
                 container.append(svg.node());  
                 }
 
-                function computeBarYPosition(data, direction = "center") {
-                function xOverlaps(a, b) {
-                    return a.Start < b.End + 1 && a.End + 1 > b.Start;
-                }
-
+            function computeBarY(data, direction = "center") {
                 const yPos = [];
                 const lastBars = {};
 
                 let minRow = 0;
                 let maxRow = 0;
 
-                data.sort((a, b) => a.Start - b.Start);
+                data.sort((a, b) => (a.End - a.Start) - (b.End - b.Start));
 
                 data.forEach((d, i) => {
                     if (i === 0) {
@@ -198,13 +241,8 @@
                     let optimalRow;
                     let minEndYear = Infinity;
 
-                    for (const row of Object.keys(lastBars).map(Number)) {
-                    if (!xOverlaps(lastBars[row], d) && lastBars[row]?.End < minEndYear) {
-                        optimalRow = row;
-                        minEndYear = lastBars[row]?.End;
-                    }
-                    }
-
+                    for (const row of Object.keys(lastBars).map(Number)) 
+    
                     if (optimalRow === undefined) {
                     if (direction === "top") {
                         optimalRow = maxRow + 1;
@@ -212,7 +250,6 @@
                         optimalRow = minRow - 1;
                     } else {
                         optimalRow = Math.abs(minRow - 1) < maxRow + 1 ? minRow - 1 : maxRow + 1;
-                    }
                     }
 
                     yPos[i] = optimalRow;
@@ -224,6 +261,9 @@
                     if (optimalRow > maxRow) {
                     maxRow = optimalRow;
                     }
+
+                    }
+
                 });
 
                 return yPos;
