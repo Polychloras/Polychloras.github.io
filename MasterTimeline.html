@@ -23,8 +23,8 @@
                 {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
                  ]
                 
-                const data = await d3.json("12Data.json")
-                TimeData(data, wind, bar)
+                //const data = await d3.json("12Data.json")
+                TimeData(datas, wind, bar)
 
                 function TimeData(data, wind, bar){
 
@@ -45,9 +45,6 @@
                             .attr("height", wind.height)
                 
                 var years = d3.range(minYear, maxYear, 50)
-                
-
-              
 
                 // Add a rect for each bar.
                 var bars = svg.append("g")
@@ -60,7 +57,56 @@
                         .attr("y", (d) => y(d.Country) - bar.height/2)
                         .attr("height", bar.height - 5)
                         .attr("width", (d) => x(d.End) - x(d.Start))
+                        .on("mouseover", function(event, d){
+        
+                            // Show vertical lines and dates along the timeline
+                            const lineGroup = svg.append("g")
+                                .attr("class", "timeline-hover")
+                                .lower();
 
+                            lineGroup.append("line")
+                            .attr("x1", x(d.Start))
+                            .attr("x2", x(d.Start))
+                            .attr("y1", y(d.Country)) // Start from the bottom of the bar
+                            .attr("y2", bar.graphH)
+                            .style("stroke", "rgba(225,0,0,0.3)");
+
+                            lineGroup.append("line")
+                            .attr("x1", x(d.End))
+                            .attr("x2", x(d.End))
+                            .attr("y1",  y(d.Country)) //start from the bottom of the bar
+                            .attr("y2", bar.graphH)
+                            .style("stroke", "rgba(225,0,0,0.3)");
+
+                            lineGroup.append("text")
+                            .text(d.Start)
+                            .attr("x", x(d.Start))
+                            .attr("y", bar.graphH + bar.height)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "red"); // Display Start date in red
+        
+                            lineGroup.append("text")
+                            .text(d.End)
+                            .attr("x", x(d.End))
+                            .attr("y",  bar.graphH + bar.height)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "red"); // Display End date in red
+                        })
+
+                        .on("mouseout", function (event, d) {
+                            // Hide vertical lines and dates along the timeline
+                            svg.selectAll(".timeline-hover").remove();
+                        
+                            // Reset the label position to original
+                            const label = d3.select(this).select("text");
+                        
+                                label.interrupt() // Stop any active transition
+                                .transition()
+                                .duration(2000)
+                                .ease(d3.easeQuadInOut)
+                                .attr("x", originalXPosition);
+                            
+                        })
                     )
                 
                  // Add a text for each bar.
@@ -74,6 +120,56 @@
                         .attr("y", (d) => y(d.Country) + 5)
                         .attr("font-size", 18)   
                         .text(d=> d.Country)
+                        .on("mouseover", function(event, d){
+        
+                            // Show vertical lines and dates along the timeline
+                            const lineGroup = svg.append("g")
+                                .attr("class", "timeline-hover")
+                                .lower();
+
+                            lineGroup.append("line")
+                            .attr("x1", x(d.Start))
+                            .attr("x2", x(d.Start))
+                            .attr("y1", y(d.Country)) // Start from the bottom of the bar
+                            .attr("y2", bar.graphH)
+                            .style("stroke", "rgba(225,0,0,0.3)");
+
+                            lineGroup.append("line")
+                            .attr("x1", x(d.End))
+                            .attr("x2", x(d.End))
+                            .attr("y1",  y(d.Country)) //start from the bottom of the bar
+                            .attr("y2", bar.graphH)
+                            .style("stroke", "rgba(225,0,0,0.3)");
+
+                            lineGroup.append("text")
+                            .text(d.Start)
+                            .attr("x", x(d.Start))
+                            .attr("y", bar.graphH + bar.height)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "red"); // Display Start date in red
+        
+                            lineGroup.append("text")
+                            .text(d.End)
+                            .attr("x", x(d.End))
+                            .attr("y",  bar.graphH + bar.height)
+                            .attr("text-anchor", "middle")
+                            .attr("fill", "red"); // Display End date in red
+                        })
+
+                        .on("mouseout", function (event, d) {
+                            // Hide vertical lines and dates along the timeline
+                            svg.selectAll(".timeline-hover").remove();
+                        
+                            // Reset the label position to original
+                            const label = d3.select(this).select("text");
+                        
+                                label.interrupt() // Stop any active transition
+                                .transition()
+                                .duration(2000)
+                                .ease(d3.easeQuadInOut)
+                                .attr("x", originalXPosition);
+                            
+                        })
                  )
                         
                    
@@ -96,40 +192,7 @@
                         .attr("y", 10)
                         .attr("fill", "currentColor"))
                 
-                bars.on("mousehover", function(event, d){
-                    const bar = d3.select(this);
-
-                    // Show vertical lines and dates along the timeline
-                    const lineGroup = svg.append("g")
-
-                    lineGroup.append("line")
-                    .attr("x1", x(d.Start))
-                    .attr("x2", x(d.Start))
-                    .attr("y1", y(d => d.Country)) // Start from the bottom of the bar
-                    .attr("y2", bar.graphH)
-                    .style("stroke", "rgba(225,0,0,0.3)");
-
-                    lineGroup.append("line")
-                    .attr("x1", x(d.End))
-                    .attr("x2", x(d.End))
-                    .attr("y1", y(d => d.Country) + bar.graphH) // Start from the bottom of the bar
-                    .attr("y2", bar.graphH)
-                    .style("stroke", "rgba(225,0,0,0.3)");
-
-                    lineGroup.append("text")
-                    .text(d.Start)
-                    .attr("x", x(d.Start))
-                    .attr("y", bar.graphH + 30)
-                    .attr("text-anchor", "middle")
-                    .attr("fill", "red"); // Display Start date in red
-
-                    lineGroup.append("text")
-                    .text(d.End)
-                    .attr("x", x(d.End))
-                    .attr("y", bar.graphH + 30)
-                    .attr("text-anchor", "middle")
-                    .attr("fill", "red"); // Display End date in red
-                })
+                
             
                 }
         </script>
