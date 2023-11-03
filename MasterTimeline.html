@@ -44,7 +44,7 @@
                             .attr("width", wind.width)
                             .attr("height", wind.height)
                 
-                var years = d3.range(minYear, maxYear, 50)
+                var years = d3.range(minYear, maxYear, 5)
 
                 // Add a rect for each bar.
                 var bars = svg.append("g")
@@ -177,7 +177,7 @@
                svg.append("g")
                     .attr("transform", `translate(0,${bar.graphH})`)
                     .attr("fill", "Black")
-                    .call(d3.axisBottom(x).tickSizeOuter(0)
+                    .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                     .tickSizeOuter(0));
                               
