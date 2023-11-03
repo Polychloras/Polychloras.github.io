@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel = stylesheet href="format.css">
+        <script src="d3.v7.js"></script>
+        <title>Master Timeline</title>
+    </head>
+
+    <body>
+    <h1>Master Timeline</h1>
+        <div id = "container"></div>
+            
+        <script>
+                const margin = ({top: 30, bottom: 30, left: 30, right: 30});
+                const wind = ({width: 1500, height: 2000})
+                const bar = ({graphX:100, graphY: 0, graphW: 1200, graphH: 250, width: 20, height: 30})
+
+                var datums = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+                {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
+                {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
+                {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start": 1973,"End": 1990 },
+                {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2023},
+                {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
+                 ]
+                
+                const data = await d3.json("12Data.json")
+                TimeData(data, wind, bar)
+
+                function TimeData(data, wind, bar){
+
+                // Calculate max of the End year and min of the Start year
+                const maxYear = d3.max(data.map(d => d.End)) + 5;
+                const minYear = d3.min(data.map(d => d.Start)) - 5;
+
+                const x = d3.scaleLinear()
+                        .domain([minYear, maxYear])
+                        .range([bar.graphX, bar.graphW]);
+                
+
+                const y = d3.scaleBand(data.map(d => d.Country), [0, bar.graphH])
+                        .padding(1);
+                
+                const svg = d3.create("svg")
+                            .attr("width", wind.width)
+                            .attr("height", wind.height)
+                
+                var years = d3.range(minYear, maxYear, 50)
+                
+
+              
+
+                // Add a rect for each bar.
+                var bars = svg.append("g")
+                        .attr("fill", "steelblue")
+                    .selectAll()
+                    .data(data)
+                    .join(
+                         enter => enter.append("rect")
+                        .attr("x", d => x(d.Start))
+                        .attr("y", (d) => y(d.Country) - bar.height/2)
+                        .attr("height", bar.height - 5)
+                        .attr("width", (d) => x(d.End) - x(d.Start))
+
+                    )
+                
+                 // Add a text for each bar.
+                var bar_text = svg.append("g")
+                        .attr("fill", "White")
+                    .selectAll()
+                    .data(data)
+                    .join(
+                        enter => enter.append("text")   
+                        .attr("x", d =>  x(d.Start) + 10)
+                        .attr("y", (d) => y(d.Country) + 5)
+                        .attr("font-size", 18)   
+                        .text(d=> d.Country)
+                 )
+                        
+                   
+                // Add the x-axis and label.
+               svg.append("g")
+                    .attr("transform", `translate(0,${bar.graphH})`)
+                    .attr("fill", "Black")
+                    .call(d3.axisBottom(x).tickSizeOuter(0)
+                    .tickFormat(d3.format(".0f")) // Add this line to change the tick format
+                    .tickSizeOuter(0));
+                              
+                container.append(svg.node());
+
+                svg.append("g")
+                    .attr("transform", `translate(${bar.graphX},0)`)
+                    .call(d3.axisLeft(y))
+                    .call(g => g.select(".domain").remove())
+                    .call(g => g.append("text")
+                        .attr("x", -bar.graphW)
+                        .attr("y", 10)
+                        .attr("fill", "currentColor"))
+                
+                bars.on("mousehover", function(event, d){
+                    const bar = d3.select(this);
+
+                    // Show vertical lines and dates along the timeline
+                    const lineGroup = svg.append("g")
+
+                    lineGroup.append("line")
+                    .attr("x1", x(d.Start))
+                    .attr("x2", x(d.Start))
+                    .attr("y1", y(d => d.Country)) // Start from the bottom of the bar
+                    .attr("y2", bar.graphH)
+                    .style("stroke", "rgba(225,0,0,0.3)");
+
+                    lineGroup.append("line")
+                    .attr("x1", x(d.End))
+                    .attr("x2", x(d.End))
+                    .attr("y1", y(d => d.Country) + bar.graphH) // Start from the bottom of the bar
+                    .attr("y2", bar.graphH)
+                    .style("stroke", "rgba(225,0,0,0.3)");
+
+                    lineGroup.append("text")
+                    .text(d.Start)
+                    .attr("x", x(d.Start))
+                    .attr("y", bar.graphH + 30)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "red"); // Display Start date in red
+
+                    lineGroup.append("text")
+                    .text(d.End)
+                    .attr("x", x(d.End))
+                    .attr("y", bar.graphH + 30)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "red"); // Display End date in red
+                })
+            
+                }
+        </script>
+        
+    </body>
+</html>

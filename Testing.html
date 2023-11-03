@@ -9,7 +9,7 @@
     <script type="module">
     //https://observablehq.com/@liuyao12/timeline 
 
-            var dummy = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
                         {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
                         {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
                         {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start": 1973,"End": 1990 },
@@ -17,8 +17,8 @@
                         {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
                     ]
         
-            const data = await d3.json("12Data.json")
-                Timeline(data)
+            //const data = await d3.json("12Data.json")
+            Timeline(data)
                 function Timeline(data) {
                 // Chart dimensions and configuration
                 const margin = ({ top: 10, right: 20, bottom: 50, left: 20 }); // Increase bottom margin
