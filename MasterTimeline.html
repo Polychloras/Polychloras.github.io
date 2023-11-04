@@ -18,7 +18,6 @@
             {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
              ]
 
-            const data = await d3.json("12Data.json")
 
     
         </script>
@@ -33,6 +32,8 @@
     </div>
             
         <script type="module">
+
+            const data = await d3.json("12Data.json")
                 TimeData(data, wind, bar)
 
                 function TimeData(data, wind, bar){
