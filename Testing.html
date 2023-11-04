@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="d3.v7.js"></script>
+    <script src="d3.v7.js">
+    </script>
+    
 </head>
 
 <body>
@@ -10,7 +12,11 @@
     <script type="module">
     //https://observablehq.com/@liuyao12/timeline 
     //https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
-
+    //https://talk.observablehq.com/t/dropdown-menu-without-viewof/3068/2
+            const margin = ({top: 30, bottom: 30, left: 30, right: 30});
+            const wind = ({width: 1500, height: 2000})
+            const bar = ({graphX:100, graphY: 0, graphW: 1200, width: 20, height: 30})
+            const color = ({main: "teal", change: "orange"})
             var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
                         {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
                         {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
@@ -18,258 +24,110 @@
                         {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2023},
                         {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
                     ]
-        
-            //const data = await d3.json("12Data.json")
-            Timeline(data)
-                function Timeline(data) {
-                // Chart dimensions and configuration
-                const margin = ({ top: 10, right: 20, bottom: 50, left: 20 }); // Increase bottom margin
-                const width = 1000;
-                const index_wdth = 100;
-                // Bar height
-                const barHeight = 20;
-                    var direction = "bottom"
-                // Calculate max of the End year and min of the Start year
-                const maxYear = Math.max(...data.map(d => d.End)) + 5;
-                const minYear = Math.min(...data.map(d => d.Start)) - 5;
+            
+           var datas = [0, 1, 2, 3]
 
-                // Compute the y position for each bar
-                const yPos = computeBarY(data, direction);
+           const svg = d3.create("svg")
+           .attr("width", 1000)
+           .attr("height", 1000)
+       
+           const maxYear = d3.max(data.map(d => d.End)) + 5;
+           const minYear = d3.min(data.map(d => d.Start)) - 5;
+           var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
+           const x = d3.scaleLinear()
+           .domain([minYear, maxYear])
+           .range([bar.graphX, bar.graphW]);
+   
+   
 
-                // Calculate the maximum yPos value and the height of the chart
-                const yPosMax = Math.max(...yPos);
-                const yPosMin = Math.min(...yPos);
-                const chartHeight = (yPosMax - yPosMin) * barHeight * 2;
-                const height = chartHeight + margin.top + margin.bottom;
+            const y = d3.scaleBand(data.map(d => d.Country), [0, graphH])
+                    .padding(1);
 
-                // Create X and Y scales
-                const xScale = d3.scaleLinear()
-                        .domain([minYear, maxYear])
-                        .range([margin.left + index_wdth, width - margin.right]);
-                const yScale = d3.scalePoint()
-                        .domain(d3.range(yPosMin, yPosMax + 1))
-                        .range([height - margin.bottom, margin.top]).padding(1.5);
-
-                // Create the chart
-                const svg = d3.select(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
-                    .attr("width", width)
-                    .attr("height", height);
-
-                const centuryStart = Math.ceil(minYear / 100) * 100;
-                const centuries = d3.range(centuryStart, maxYear, 100);
-
-                // Draw vertical gridlines at every century mark
-                const linesLayer = svg.append("g").attr("class", "lines-layer");
-
-                linesLayer.append("g")
-                    .selectAll("line")
-                    .data(centuries)
-                    .join("line")
-                    .attr("x1", d => xScale(d))
-                    .attr("x2", d => xScale(d))
-                    .attr("y1", margin.bottom)
-                    .attr("y2", chartHeight)
-                    .style("stroke", "rgba(0,0,0,0.2)")
-                    .style("stroke-dasharray", "2,2");
-
-                // Draw x-axis with labels every 20 years, starting from 1700
-                svg.append("g")
-                    .attr("transform", `translate(0,${chartHeight})`)
-                    .call(d3.axisBottom(xScale)
-                    .tickValues(d3.range(Math.floor(minYear / 20) * 20, maxYear, 20))
-                    .tickFormat(d3.format(".0f")) // Add this line to change the tick format
-                    .tickSizeOuter(0));
-                
-
-
-                // shade in boxes for easy identification
-                const shadebox = svg.append("g")
-                    .selectAll("g")
-                    .data(data)
-                    .join("g");
-
-               // Create indexs
-               const descrp = svg.append("g")
-                    .selectAll("g")
-                    .data(data)
-                    .join("g");
-
-                // Create bars and labels
-                const bars = svg.append("g")
-                    .selectAll("g")
-                    .data(data)
-                    .join("g");
-                
-
-                // Create bars
+           var loca = data.map((d) => y(d.Country) - (bar.height+10)/2)
+           var bar_loc = data.map((d) => y(d.Country) - (bar.height - 5)/2)
+           var txt_loc = data.map((d) => y(d.Country) + 5) 
+                        // Add a rect for each bar.
+           var bars = svg.append("g")
+                .attr("fill", color.main)
+                .attr("stroke", "null")
+                .selectAll("g")
+                .data(data)
+                .join("g")
+            
+            
                 bars.append("rect")
-                    .attr("x", d => xScale(d.Start))
-                    .attr("width", d => xScale(d.End) - xScale(d.Start))
-                    .attr("y", (d, i) => yScale(yPos[i]))
-                    .attr("height", barHeight)
-                    .attr("fill", "steelblue");
+                    .attr("x", d => x(d.Start))
+                    .attr("y", (d, i) => bar_loc[i])
+                    .attr("height", bar.height - 5)
+                    .attr("width", (d) => x(d.End) - x(d.Start)) 
+            
+            bars.call(drag, drag(bars, svg))
 
-                // Create labels displaying only Country
-                bars.append("text")
-                    .text(d => d.Country)
-                    .attr("x", d => xScale(d.Start) + 4)
-                    .attr("y", (d, i) => yScale(yPos[i]) + barHeight / 2)
-                    .attr("alignment-baseline", "central")
-                    .attr("font-size", 12)
-                    .attr("fill", "white")
-                    .attr("white-space", "nowrap")
-                    // .attr("overflow", "hidden")
-                    .attr("text-overflow", "ellipsis");
-                
-                shadebox.append("rect")
-                    .attr("x", margin.left)
-                    .attr("y", (d, i) => yScale(yPos[i]) - 5)
-                    .attr("width", width)
-                    .attr("opacity", 0.25)
-                    .attr("height", barHeight + 10)
-                    .attr("fill", function (d, i){ if((yPos[i]) % 2 == 0){return "grey"} else {return"White"}});
-
-                descrp.append("rect")
-                    .attr("x", margin.left)
-                    .attr("y", (d, i) => yScale(yPos[i]))
-                    .attr("width", index_wdth)
-                    .attr("height", barHeight)
-                    .attr("fill", "steelblue");
-
-                // Create labels displaying only Country
-                descrp.append("text")
-                    .text(d => d.Country)
-                    .attr("x",margin.left + index_wdth/4)
-                    .attr("y", (d, i) => yScale(yPos[i]) + barHeight/2)
-                    .attr("alignment-baseline", "central")
-                    .attr("font-size", 12)
-                    .attr("fill", "white")
-                    .attr("white-space", "nowrap")
-                    // .attr("overflow", "hidden")
-                    .attr("text-overflow", "ellipsis");
-
-                // Mouseover and mouseout events for scrolling labels and showing dates on the timeline
-                bars.on("mouseover", function (event, d) {
-                    const bar = d3.select(this);
-
-                    // Show vertical lines and dates along the timeline
-                    const lineGroup = svg.append("g")
-                    .attr("class", "timeline-hover")
-                    .lower(); // Lower the group so that it is positioned behind the bars
-
-                    lineGroup.append("line")
-                    .attr("x1", xScale(d.Start))
-                    .attr("x2", xScale(d.Start))
-                    .attr("y1", yScale(yPos[data.indexOf(d)]) + barHeight) // Start from the bottom of the bar
-                    .attr("y2", chartHeight)
-                    .style("stroke", "rgba(225,0,0,0.3)");
-
-                    lineGroup.append("line")
-                    .attr("x1", xScale(d.End))
-                    .attr("x2", xScale(d.End))
-                    .attr("y1", yScale(yPos[data.indexOf(d)]) + barHeight) // Start from the bottom of the bar
-                    .attr("y2", chartHeight)
-                    .style("stroke", "rgba(225,0,0,0.3)");
-
-                    lineGroup.append("text")
-                    .text(d.Start)
-                    .attr("x", xScale(d.Start))
-                    .attr("y", chartHeight + 30)
-                    .attr("text-anchor", "middle")
-                    .attr("fill", "red"); // Display Start date in red
-
-                    lineGroup.append("text")
-                    .text(d.End)
-                    .attr("x", xScale(d.End))
-                    .attr("y", chartHeight + 30)
-                    .attr("text-anchor", "middle")
-                    .attr("fill", "red"); // Display End date in red
-
-
-                    // Scroll label if necessary
-                    const label = bar.select("text");
-                    const labelWidth = label.node().getComputedTextLength();
-                    const barWidth = xScale(d.End) - xScale(d.Start);
-                    
-                    if (labelWidth > barWidth - 8) {
-                    const scrollAmount = labelWidth - barWidth + 12; // Leave some padding for visual clarity
-                    label.interrupt() // Stop any active transition
-                        .transition()
-                        .duration(2000)
-                        .ease(d3.easeQuadInOut)
-                        .attr("x", d => xScale(d.Start) + 4 - scrollAmount)
-                        .attr("clip-path", 'polygon(0,0,${barWidth},0,${barWidth},${barHeight},0,${barHeight})');
-                    }
-
-                })
-                .on("mouseout", function (event, d) {
-                    // Hide vertical lines and dates along the timeline
-                    svg.selectAll(".timeline-hover").remove();
-                
-                    // Reset the label position to original
-                    const label = d3.select(this).select("text");
-                    const currentXPosition = parseFloat(label.attr("x"));
-                    const originalXPosition = xScale(d.Start) + 4;
-                
-                    if (currentXPosition !== originalXPosition) {
-                        label.interrupt() // Stop any active transition
-                        .transition()
-                        .duration(2000)
-                        .ease(d3.easeQuadInOut)
-                        .attr("x", originalXPosition);
-                    }
+           function drag (g, svg){
+            return function(g, svg) {
+              var x, y, free;
+              g.each((d, i) => {
+                d.slot = i;
+              }).attr("x", d => d.slot * w);
+              function dragstarted(event, d) {
+                const me = d3
+                    .select(this)
+                    .raise()
+                    .classed("active", true),
+                  m = d3.pointer(event);
+                x = +me.attr("x") - event.x;
+                y = +me.attr("y") - event.y;
+                free = d.slot;
+              }
+          
+              function dragged(event, d, i) {
+                const xx = Math.max(0, x + event.x),
+                  yy = 0; //Math.max(0, y + event.y);
+                d3.select(this)
+                  .attr("x", (d.x = xx))
+                  .attr("y", (d.y = yy));
+          
+                let p = Math.round(xx / w);
+          
+                svg.value = g.data().map(d => d.slot);
+                svg.dispatchEvent(new CustomEvent("input"));
+          
+                if (p === d.slot) return;
+          
+                g.each(function(e) {
+                  if (e !== d && e.slot === p) {
+                    e.slot = free;
+                    d.slot = free = p;
+                    d3.select(this)
+                      .transition()
+                      .attr("x", e.slot * w);
+                  }
                 });
-
-                // Return the SVG node as a value
-                container.append(svg.node());  
-                }
-
-            function computeBarY(data, direction = "center") {
-                const yPos = [];
-                const lastBars = {};
-
-                let minRow = 0;
-                let maxRow = 0;
-
-                data.sort((a, b) => (a.End - a.Start) - (b.End - b.Start));
-
-                data.forEach((d, i) => {
-                    if (i === 0) {
-                    yPos[i] = 0;
-                    lastBars[0] = d;
-                    return;
-                    }
-
-                    let optimalRow;
-                    let minEndYear = Infinity;
-
-                    for (const row of Object.keys(lastBars).map(Number)) 
-    
-                    if (optimalRow === undefined) {
-                    if (direction === "top") {
-                        optimalRow = maxRow + 1;
-                    } else if (direction === "bottom") {
-                        optimalRow = minRow - 1;
-                    } else {
-                        optimalRow = Math.abs(minRow - 1) < maxRow + 1 ? minRow - 1 : maxRow + 1;
-                    }
-
-                    yPos[i] = optimalRow;
-                    lastBars[optimalRow] = d;
-
-                    if (optimalRow < minRow) {
-                    minRow = optimalRow;
-                    }
-                    if (optimalRow > maxRow) {
-                    maxRow = optimalRow;
-                    }
-
-                    }
-
-                });
-
-                return yPos;
-                }
+              }
+          
+              function dragended(event, d) {
+                d.slot = free;
+                d3.select(this)
+                  .transition()
+                  .attr("x", d.slot * w);
+                free = -1;
+                d3.select(this).classed("active", false);
+              }
+          
+              const drag = d3
+                .drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+          
+              svg.value = g.data().map(d => d.slot);
+              svg.dispatchEvent(new CustomEvent("input"));
+          
+              return drag(g);
+            }
+          }
+        
+          container.append(svg.node());                  
 
 
     </script>
