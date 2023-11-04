@@ -6,19 +6,22 @@
         
         <script>         
             const margin = ({top: 30, bottom: 30, left: 30, right: 30});
-            const wind = ({width: 1500, height: 2000})
-            const bar = ({graphX:100, graphY: 0, graphW: 1200, width: 20, height: 30})
+            const bar = ({graphX:100, graphY: 0, graphW: 1200, width: 20, height: 20})
             const color = ({main: "teal", change: "orange"})
 
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start": 1973,"End": 1990 },
             {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2023},
-            {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008}
+            {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008},
+            {"Country": "Argentina1","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+            {"Country": "Argentina2","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+            {"Country": "Argentina3","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
+            {"Country": "Argentina4","Topics": ["dictatorship "],"Start": 1976,"End": 1983}
              ]
 
-            const data = await d3.json("12Data.json")
+            //const data = await d3.json("12Data.json")
 
     
         </script>
@@ -29,34 +32,23 @@
     <body>
     <h1>Master Timeline</h1>
     <div id="change"></div>
-    <div id = "container">
-    </div>
-            
+    <div id = "container"></div>
+    <select id="button"></select>       
         <script type="module">
-                TimeData(data, wind, bar)
 
-                function TimeData(data, wind, bar){
+           // const data = await d3.json("12Data.json")
+                TimeData(data,  bar)
+
+                function TimeData(data,  bar){
                 var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
                 // Calculate max of the End year and min of the Start year
                 const maxYear = d3.max(data.map(d => d.End)) + 5;
                 const minYear = d3.min(data.map(d => d.Start)) - 5;
-
-                const x = d3.scaleLinear()
-                        .domain([minYear, maxYear])
-                        .range([bar.graphX, bar.graphW]);
-                
-                
-
-                const y = d3.scaleBand(data.map(d => d.Country), [0, graphH])
-                        .padding(1);
-                
-                const svg = d3.create("svg")
-                            .attr("width", wind.width)
-                            .attr("height", wind.height)
-
+                const wind = ({width: bar.graphW + bar.height, height: graphH + bar.height})
+                    
                 const lsti = d3.create('div')
-                                .attr("width", 1000)
-                                .attr("height", 50)
+                    .attr("width", 1000)
+                    .attr("height", 50)
 
                 const navbar = lsti.append('nav')
 
@@ -64,22 +56,28 @@
                     .selectAll()
                     .data(data)
                     .join('li')
-                   
+                
                 const buttons = checkbox.append('li')
 
                 buttons.append('a')
                     .attr("href",  d=> 'https://polychloras.github.io/' + d.Country)
                     .text(d=>d.Country)
 
-                change.append(lsti.node())
+                change.append(lsti.node()) 
+
+                const x = d3.scaleLinear()
+                        .domain([minYear, maxYear])
+                        .range([bar.graphX, bar.graphW]);
+
+                const y = d3.scaleBand(data.map(d => d.Country), [0, graphH])
+                        .padding(1);
+                
+                
+                const svg = d3.create("svg")
+                            .attr("viewBox", [0, 0, wind.width, wind.height])
+
 
                 var years = d3.range(minYear, maxYear, 5)
-                
-
-                var drag = d3.drag()
-                            .on("start", dragstarted)
-                            .on("drag", dragged)
-                            .on("end", dragended)
                 
                 var loca = data.map((d) => y(d.Country) - (bar.height+10)/2)
                 var bar_loc = data.map((d) => y(d.Country) - (bar.height - 5)/2)
@@ -124,15 +122,13 @@
                         .attr("x", d => x(d.Start) + 10)
                         .attr("y", (d, i) =>txt_loc[i])
                         .attr("font-size", 16) 
-                        .text(d=> d.Country)   
+                        .text(d=> d.Country)     
                     
-
-                
-                    
-                        
+                bars.on("mouseover", mouseO) 
+                bars.on("mouseout", mouseL)
                 bars.on("mousedown", clickdown)  
                 bars.on("mouseup", clickup)
-                bars.call(drag)
+                //bars.call(drag)
 
                 // Add the x-axis and label.
                svg.append("g")
@@ -151,32 +147,11 @@
                         .attr("y", 10)
                         .attr("fill", "currentColor"))
 
-                    function dragstarted(event, d){
-                            d3.select(this).transition()
-                                .attr("opacity", 0.5)
-                            d3.select(this)
-                            .on("mousedown", clickdown)
-
-                    }
-
-                    function dragged(event, d){
-                        d3.select(this).select("rect")
-                            .transition()
-                            .attr("y", )
-                            console.log(d.y)
-
-                        d3.select(this).select("text")
-                            .attr("y", (d) => y(d.Country) + 1)
-                    }
-                    
-                    function dragended(event, d){
-                        d3.select(this).transition()
-                            .attr("opacity", 1)
-                            .attr("fill", color.main)
-                        d3.select(this)
-                        .on("mouseup", clickup);
-                        
-                    }
+                      // prevent scrolling then apply the default filter
+                    function filter(event) {
+                            event.preventDefault();
+                            return (!event.ctrlKey || event.type === 'wheel') && !event.button;
+                     }
                 
                     function get_switch(i){
                             var temp = -1
