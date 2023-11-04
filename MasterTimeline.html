@@ -37,7 +37,8 @@
     <div id="change"></div>
     <div id = "container"></div>       
         <script type="module">
-            
+                const data = await d3.json("12Data.json")
+                const featureA = await d3.json("12Collective.json") 
 
                 var sort_opt = ["Sort By", "Start_Date", "End_Date", "Country"]
                 var topics_map = featureA.filter(d => get_element(d, "Topics"))[0]
@@ -51,8 +52,6 @@
                     return (value.feature == element)
                 }
 
-                const data = await d3.json("12Data.json")
-                const featureA = await d3.json("12Collective.json") 
 
                 const control_bar = d3.create('div')
                 .attr("width", 1000)
