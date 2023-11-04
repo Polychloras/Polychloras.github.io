@@ -9,7 +9,7 @@
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
@@ -35,9 +35,15 @@
         <script type="module">
 
                 var sort_opt = ["Start_Date", "End_Date", "Country"]
-                const data = await d3.json("12Data.json")
+                var feat_opt = ["dictatorship", "state violence"]
+                //const data = await d3.json("12Data.json")
 
 
+                // <div>
+                // <nav>
+                    //<select>
+                // </nav>
+                // </div>
                 const control_bar = d3.create('div')
                 .attr("width", 1000)
                 .attr("height", 50)
@@ -51,10 +57,14 @@
                 
                 //control_bar.append(dropdown)
                 const dropdown = control_bar.append("select")
-                .attr("id", `button`)
-                .attr("name", 'button')
+                .attr("id", `dropdown`)
+                .attr("name", 'dropdown')
    
-                const svg_button = d3.select("button")
+                const svg_button = d3.select("dropdown")
+
+                const dropfeature = control_bar.append("select")
+                .attr("id", `feature`)
+                .attr("name", 'feature')
 
                 var button = dropdown.selectAll()
                             .data(sort_opt)
@@ -63,6 +73,15 @@
                             .text(d => d)
                             .attr("value", (d) => d)
                         )
+
+                var feat_drp = dropfeature.selectAll()
+                        .data(feat_opt)
+                        .join(
+                            enter => enter.append('option')
+                        .text(d => d)
+                        .attr("value", (d) => d)
+                    )
+
                 const buttons = ctry_btn.append('li')
 
                 buttons.append('a')
@@ -284,7 +303,7 @@
        
                     }
     
-                    d3.select("#button").on('change', function(event, d){
+                    d3.select("#dropdown").on('change', function(event, d){
                         const slct_optn = d3.select(this).property("value")
                         console.log(slct_optn)
                         update(slct_optn)

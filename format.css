@@ -48,6 +48,6 @@ nav {
 }
 
 div [id = "select"]{
-    display:block;
-    padding: 40px;
+    display: block;
+    padding-left: 40px;
 }
