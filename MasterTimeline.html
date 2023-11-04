@@ -9,7 +9,7 @@
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
-            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
@@ -22,7 +22,7 @@
              ]
 
         
-             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
              {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}
             ]
 
@@ -51,8 +51,8 @@
                     return (value.feature == element)
                 }
 
-                //const data = await d3.json("12Data.json")
-                //const featureA = await d3.json("12Collective.json") 
+                const data = await d3.json("12Data.json")
+                const featureA = await d3.json("12Collective.json") 
 
                 const control_bar = d3.create('div')
                 .attr("width", 1000)
