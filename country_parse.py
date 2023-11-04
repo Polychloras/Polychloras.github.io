@@ -36,9 +36,14 @@ class country():
 
      def set_events(self, listed, a):
           b = listed.index('Memory initiatives')
+          event_date = []
+          event_desc = []
           for event in listed[a:b]:
                  year_event = event.split('-')
-                 self.timeline.update({event:year_event[0]})
+                 event_date.append(year_event[0])
+                 event_desc.append(event)
+                 self.timeline.update({"Dates":event_date})
+                 self.timeline.update({"Events":event_desc})
           return b
 
      def set_meminit(self, listed, b):
@@ -84,8 +89,8 @@ class country():
             else:
                 end = '2023'
             self.table.update({'Topics':topics})
-            self.table.update({'Start-Date': int(start)})
-            self.table.update({'End-Date': int(end)})
+            self.table.update({'Start_Date': int(start)})
+            self.table.update({'End_Date': int(end)})
 
      def get_time(self):
           return self.timeline

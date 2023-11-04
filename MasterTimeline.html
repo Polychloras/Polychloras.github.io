@@ -9,7 +9,7 @@
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
-            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
@@ -35,7 +35,7 @@
         <script type="module">
 
                 var sort_opt = ["Start_Date", "End_Date", "Country"]
-                //const data = await d3.json("12Data.json")
+                const data = await d3.json("12Data.json")
 
 
                 const control_bar = d3.create('div')
