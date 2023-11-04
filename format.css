@@ -42,3 +42,12 @@ li a:hover{
     background-color:gold;
 
 }
+
+nav {
+    padding-bottom: 30px
+}
+
+div [id = "select"]{
+    display:block;
+    padding: 40px;
+}

@@ -1,3 +1,5 @@
 https://observablehq.com/@liuyao12/timeline 
 https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
 https://www.youtube.com/watch?v=aHJCt2adSWA&t=1441s
+https://d3-graph-gallery.com/graph/line_select.html
+https://d3-graph-gallery.com/graph/line_select.html

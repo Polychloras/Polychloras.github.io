@@ -31,40 +31,47 @@
     <body>
     <h1>Master Timeline</h1>
     <div id="change"></div>
-    <div id = "container"></div>
-    <select id="button"></select>       
+    <div id = "container"></div>       
         <script type="module">
 
-            //const data = await d3.json("12Data.json")
-                TimeData(data, bar)
+                var sort_opt = ["Start", "End", "Country"]
+                //const data = await d3.json("12Data.json")
+                TimeData(data, bar, sort_opt)
                 
 
-                function TimeData(data, bar){
+                function TimeData(datums, bar, sort_opt){
 
+                var data = datums
                 var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
                 // Calculate max of the End year and min of the Start year
                 const maxYear = d3.max(data.map(d => d.End)) + 5;
                 const minYear = d3.min(data.map(d => d.Start)) - 5;
-                const wind = ({width: bar.graphW + bar.height, height: graphH + bar.height})
+                const wind = ({width: bar.graphW + 20 * bar.height, height: graphH + 20 * bar.height})
                     
-                const lsti = d3.create('div')
+                const control_bar = d3.create('div')
                     .attr("width", 1000)
                     .attr("height", 50)
 
-                const navbar = lsti.append('nav')
-
-                const checkbox = navbar.append('ul')               
+                const navbar = control_bar.append('nav')
+                
+                const ctry_btn = navbar.append('ul')               
                     .selectAll()
                     .data(data)
                     .join('li')
                 
-                const buttons = checkbox.append('li')
+                //control_bar.append(dropdown)
+
+                const buttons = ctry_btn.append('li')
 
                 buttons.append('a')
                     .attr("href",  d=> 'https://polychloras.github.io/' + d.Country)
                     .text(d=>d.Country)
+                
+            
 
-                change.append(lsti.node()) 
+                change.append(control_bar.node()) 
+
+
 
                 const x = d3.scaleLinear()
                         .domain([minYear, maxYear])
@@ -199,14 +206,14 @@
                         lineGroup.append("text")
                         .text(d.Start)
                         .attr("x", x(d.Start))
-                        .attr("y", graphH + bar.height)
+                        .attr("y", graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display Start date in red
     
                         lineGroup.append("text")
                         .text(d.End)
                         .attr("x", x(d.End))
-                        .attr("y",  graphH + bar.height)
+                        .attr("y",  graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display End date in red
                     }
@@ -221,6 +228,31 @@
                         d3.select(this).transition()
                         .attr("fill", color.main)
                     }
+                    const dropbox = d3.create('div')
+                    const dropdown = dropbox.append("select")
+                         .attr("id", `button`)
+                         .attr("name", 'button')
+    
+                     var button = dropdown.selectAll()
+                         .data(sort_opt)
+                         .join(
+                             enter => enter.append('option')
+                         .text(d => d)
+                         .attr("value", d => d)
+                     )
+
+                    function update(selectedGroup){
+                        const filter_data = data.map((d) => d[selectedGroup])
+                        bars.data(filter_data)
+                        .transition()
+                        
+                    }
+    
+                    d3.select("button").on('change', function(event, d){
+                        const slct_optn = d3.select(this).property("value")
+                        update(slct_optn)
+                    })
+
 
                         container.append(svg.node());
             
