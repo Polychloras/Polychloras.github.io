@@ -9,16 +9,16 @@
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
-            {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
-            {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
-            {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start": 1973,"End": 1990 },
-            {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2016},
-            {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008},
-            {"Country": "Argentina1","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
-            {"Country": "Argentina2","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
-            {"Country": "Argentina3","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
-            {"Country": "Argentina4","Topics": ["dictatorship "],"Start": 1976,"End": 1983}
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
+            {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
+            {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
+            {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start_Date": 1960,"End_Date": 2016},
+            {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start_Date": 1983,"End_Date": 2008},
+            {"Country": "Argentina1","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            {"Country": "Argentina2","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            {"Country": "Argentina3","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            {"Country": "Argentina4","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983}
              ]
 
 
@@ -34,8 +34,8 @@
     <div id = "container"></div>       
         <script type="module">
 
-                var sort_opt = ["Start", "End", "Country"]
-                const data = await d3.json("12Data.json")
+                var sort_opt = ["Start_Date", "End_Date", "Country"]
+                //const data = await d3.json("12Data.json")
 
 
                 const control_bar = d3.create('div')
@@ -79,11 +79,11 @@
                 
                 function TimeData(datums, bar){
 
-                var data = d3.sort(datums, (d) => d.Start)
-                var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
-                // Calculate max of the End year and min of the Start year
-                const maxYear = d3.max(data.map(d => d.End)) + 5;
-                const minYear = d3.min(data.map(d => d.Start)) - 5;
+                var data = d3.sort(datums, (d) => d.Start_Date)
+                var graphH = d3.count(data, d=> d.Start_Date) * (bar.height + bar.height)
+                // Calculate max of the End year and min of the Start_Date year
+                const maxYear = d3.max(data.map(d => d.End_Date)) + 5;
+                const minYear = d3.min(data.map(d => d.Start_Date)) - 5;
                 const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 2 * bar.height})
                     
                 
@@ -132,16 +132,16 @@
                 var ind_time = links.append("rect")
                     .attr("fill", color.main)
                     .attr("stroke", "null")
-                    .attr("x", d => x(d.Start))
+                    .attr("x", d => x(d.Start_Date))
                     .attr("y", (d, i) => y(d.Country) - bar.height/4)
                     .attr("height", bar.height - 5)
-                    .attr("width", (d) => x(d.End) - x(d.Start))           
+                    .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))           
 
 
 
                 var txt = bars.append("text")
                         .attr("fill", "white")
-                        .attr("x", d => x(d.Start) + 10)
+                        .attr("x", d => x(d.Start_Date) + 10)
                         .attr("y", (d, i) => y(d.Country) + bar.height/4)
                         .attr("font-size", 16) 
                         .text(d=> d.Country)     
@@ -200,29 +200,29 @@
                             .lower();
 
                         lineGroup.append("line")
-                        .attr("x1", x(d.Start))
-                        .attr("x2", x(d.Start))
+                        .attr("x1", x(d.Start_Date))
+                        .attr("x2", x(d.Start_Date))
                         .attr("y1", y(d.Country)) // Start from the bottom of the bar
                         .attr("y2", graphH)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("line")
-                        .attr("x1", x(d.End))
-                        .attr("x2", x(d.End))
+                        .attr("x1", x(d.End_Date))
+                        .attr("x2", x(d.End_Date))
                         .attr("y1",  y(d.Country)) //start from the bottom of the bar
                         .attr("y2", graphH)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("text")
-                        .text(d.Start)
-                        .attr("x", x(d.Start))
+                        .text(d.Start_Date)
+                        .attr("x", x(d.Start_Date))
                         .attr("y", graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display Start date in red
     
                         lineGroup.append("text")
-                        .text(d.End)
-                        .attr("x", x(d.End))
+                        .text(d.End_Date)
+                        .attr("x", x(d.End_Date))
                         .attr("y",  graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display End date in red
@@ -268,16 +268,16 @@
                                 .duration(2000)
                                 .attr("fill", color.main)
                                 .attr("stroke", "null")
-                                .attr("x", d => x(d.Start))
+                                .attr("x", d => x(d.Start_Date))
                                 .attr("y", (d, i) => y(d.Country) - bar.height/4)
                                 .attr("height", bar.height - 5)
-                                .attr("width", (d) => x(d.End) - x(d.Start))  
+                                .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))  
 
                         txt.data(filter_data)
                             .transition()
                             .duration(2000)
                                 .attr("fill", "white")
-                                .attr("x", d => x(d.Start) + 10)
+                                .attr("x", d => x(d.Start_Date) + 10)
                                 .attr("y", (d, i) => y(d.Country) + bar.height/4)
                                 .attr("font-size", 16) 
                                 .text(d=> d.Country) 

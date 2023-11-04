@@ -84,8 +84,8 @@ class country():
             else:
                 end = '2023'
             self.table.update({'Topics':topics})
-            self.table.update({'Start': int(start)})
-            self.table.update({'End': int(end)})
+            self.table.update({'Start-Date': int(start)})
+            self.table.update({'End-Date': int(end)})
 
      def get_time(self):
           return self.timeline
