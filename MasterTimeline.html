@@ -118,6 +118,8 @@
                     .attr("href", d => "https://polychloras.github.io/" + d.Country)
 
                 const ind_time = links.append("rect")
+                    .attr("fill", color.main)
+                    .attr("stroke", "null")
                     .attr("x", d => x(d.Start))
                     .attr("y", (d, i) => bar_loc[i])
                     .attr("height", bar.height - 5)
