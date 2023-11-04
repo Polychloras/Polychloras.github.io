@@ -3,3 +3,10 @@ https://medium.com/@kj_schmidt/show-data-on-mouse-over-with-d3-js-3bf598ff8fc2
 https://www.youtube.com/watch?v=aHJCt2adSWA&t=1441s
 https://d3-graph-gallery.com/graph/line_select.html
 https://d3-graph-gallery.com/graph/line_select.html
+https://www.w3schools.com/css/tryit.asp?filename=trycss_sel_attribute_value
+https://www.w3schools.com/css/css_attribute_selectors.asp
+https://d3js.org/d3-array/summarize#rank
+https://jenkov.com/tutorials/svg/index.html
+https://www.youtube.com/watch?v=aHJCt2adSWA&t=1441s
+https://website.education.wisc.edu/~swu28/d3t/link.html
+https://www.tutorialsteacher.com/d3js/data-binding-in-d3js#data
