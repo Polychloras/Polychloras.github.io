@@ -6,14 +6,14 @@
         
         <script>         
             const margin = ({top: 30, bottom: 30, left: 30, right: 30});
-            const bar = ({graphX:100, graphY: 0, graphW: 1200, width: 20, height: 20})
+            const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
             var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start": 1964, "End": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start": 1964,"End": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start": 1973,"End": 1990 },
-            {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2023},
+            {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start": 1960,"End": 2016},
             {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start": 1983,"End": 2008},
             {"Country": "Argentina1","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
             {"Country": "Argentina2","Topics": ["dictatorship "],"Start": 1976,"End": 1983},
@@ -36,21 +36,11 @@
 
                 var sort_opt = ["Start", "End", "Country"]
                 //const data = await d3.json("12Data.json")
-                TimeData(data, bar, sort_opt)
-                
 
-                function TimeData(datums, bar, sort_opt){
 
-                var data = datums
-                var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
-                // Calculate max of the End year and min of the Start year
-                const maxYear = d3.max(data.map(d => d.End)) + 5;
-                const minYear = d3.min(data.map(d => d.Start)) - 5;
-                const wind = ({width: bar.graphW + 20 * bar.height, height: graphH + 20 * bar.height})
-                    
                 const control_bar = d3.create('div')
-                    .attr("width", 1000)
-                    .attr("height", 50)
+                .attr("width", 1000)
+                .attr("height", 50)
 
                 const navbar = control_bar.append('nav')
                 
@@ -60,45 +50,67 @@
                     .join('li')
                 
                 //control_bar.append(dropdown)
+                const dropdown = control_bar.append("select")
+                .attr("id", `button`)
+                .attr("name", 'button')
+   
+                const svg_button = d3.select("button")
 
+                var button = dropdown.selectAll()
+                            .data(sort_opt)
+                            .join(
+                                enter => enter.append('option')
+                            .text(d => d)
+                            .attr("value", (d) => d)
+                        )
                 const buttons = ctry_btn.append('li')
 
                 buttons.append('a')
                     .attr("href",  d=> 'https://polychloras.github.io/' + d.Country)
                     .text(d=>d.Country)
-                
             
+                change.append(control_bar.node())
 
-                change.append(control_bar.node()) 
+                var timeline = TimeData(data, bar)
+
+                container.append(timeline);
 
 
+                
+                function TimeData(datums, bar){
 
+                var data = d3.sort(datums, (d) => d.Start)
+                var graphH = d3.count(data, d=> d.Start) * (bar.height + bar.height)
+                // Calculate max of the End year and min of the Start year
+                const maxYear = d3.max(data.map(d => d.End)) + 5;
+                const minYear = d3.min(data.map(d => d.Start)) - 5;
+                const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 2 * bar.height})
+                    
+                
                 const x = d3.scaleLinear()
                         .domain([minYear, maxYear])
                         .range([bar.graphX, bar.graphW]);
 
-                const y = d3.scaleBand(data.map(d => d.Country), [0, graphH])
+                var y = d3.scaleBand(data.map(d => d.Country), [0, wind.height])
                         .padding(1);
                 
-                
-                const svg = d3.create("svg")
-                            .attr("viewBox", [0, 0, wind.width, wind.height])
+                               
 
+                var box = d3.select("#container")
+                            
+                var svg = box.append('svg')
+                            .attr("viewBox", [0, 0, wind.width, wind.height]) 
+                
 
                 var years = d3.range(minYear, maxYear, 5)
-                
-                var loca = data.map((d) => y(d.Country) - (bar.height+10)/2)
-                var bar_loc = data.map((d) => y(d.Country) - (bar.height - 5)/2)
-                var txt_loc = data.map((d) => y(d.Country) + 5)
-
-
+            
                 var shaderboxes = svg.append("g")
-                    .selectAll()
+                    .selectAll("g")
                     .data(data)
                     .join(
                         enter => enter.append("rect")
                         .attr("x", bar.graphX)
-                        .attr("y", (d, i) => loca[i])
+                        .attr("y", (d) => y(d.Country) - bar.height/2)
                         .attr("width", bar.graphW)
                         .attr("opacity", 0.25)
                         .attr("height", bar.height + 10)
@@ -114,23 +126,23 @@
                     .join("g")
 
                 
-                const links = bars.append("a")
+                var links = bars.append("a")
                     .attr("href", d => "https://polychloras.github.io/" + d.Country)
 
-                const ind_time = links.append("rect")
+                var ind_time = links.append("rect")
                     .attr("fill", color.main)
                     .attr("stroke", "null")
                     .attr("x", d => x(d.Start))
-                    .attr("y", (d, i) => bar_loc[i])
+                    .attr("y", (d, i) => y(d.Country) - bar.height/4)
                     .attr("height", bar.height - 5)
                     .attr("width", (d) => x(d.End) - x(d.Start))           
 
 
 
-                const txt = bars.append("text")
+                var txt = bars.append("text")
                         .attr("fill", "white")
                         .attr("x", d => x(d.Start) + 10)
-                        .attr("y", (d, i) =>txt_loc[i])
+                        .attr("y", (d, i) => y(d.Country) + bar.height/4)
                         .attr("font-size", 16) 
                         .text(d=> d.Country)     
                     
@@ -141,18 +153,20 @@
                 //bars.call(drag)
 
                 // Add the x-axis and label.
-               svg.append("g")
-                    .attr("transform", `translate(0,${graphH})`)
+               var gx = svg.append("g")
+                    .attr("transform", `translate(0,${graphH + bar.height})`)
                     .attr("fill", color.main)
                     .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
-                    .tickSizeOuter(0)); 
+                    .tickSizeOuter(0))
+                   
 
-                svg.append("g")
+                var gy = svg.append("g")
                     .attr("transform", `translate(${bar.graphX},0)`)
                     .call(d3.axisLeft(y))
                     .call(g => g.select(".domain").remove())
                     .call(g => g.append("text")
+                        .attr("font-size", 18)
                         .attr("x", -bar.graphW)
                         .attr("y", 10)
                         .attr("fill", "currentColor"))
@@ -163,13 +177,7 @@
                             return (!event.ctrlKey || event.type === 'wheel') && !event.button;
                      }
                 
-                    function get_switch(i){
-                            var temp = -1
-                            temp = bar_loc[i]
-                            bar_loc[i] = bar_loc[i+1]
-                            bar_loc[i] = temp 
-                            return bar_loc[i]
-                    }
+        
                     function mouseL(event, d, i){                  
                             // Hide vertical lines and dates along the timeline
                             svg.selectAll(".timeline-hover").remove();
@@ -230,34 +238,58 @@
                         d3.select(this).transition()
                         .attr("fill", color.main)
                     }
-                    const dropbox = d3.create('div')
-                    const dropdown = dropbox.append("select")
-                         .attr("id", `button`)
-                         .attr("name", 'button')
-    
-                     var button = dropdown.selectAll()
-                         .data(sort_opt)
-                         .join(
-                             enter => enter.append('option')
-                         .text(d => d)
-                         .attr("value", d => d)
-                     )
 
                     function update(selectedGroup){
-                        const filter_data = data.map((d) => d[selectedGroup])
+                        var filter_data = d3.sort(datums, (d) => d[selectedGroup])
+
+                        console.log(filter_data[0][selectedGroup])
+                        console.log(filter_data[0].Country)
+
+                        y = d3.scaleBand(filter_data.map(d => d.Country), [0, wind.height])
+                        .padding(1);
+
+                        gy.transition()
+                        .duration(2000)
+                        .attr("transform", `translate(${bar.graphX},0)`)
+                        .call(d3.axisLeft(y))
+                        .call(g => g.select(".domain").remove())
+
                         bars.data(filter_data)
-                        .transition()
+                            .transition()
                         
+
+                        links.data(filter_data)
+                                .transition()
+                                .duration(2000)
+                                .attr("href", d => "https://polychloras.github.io/" + d.Country)
+            
+                        ind_time.data(filter_data)
+                                .transition()
+                                .duration(2000)
+                                .attr("fill", color.main)
+                                .attr("stroke", "null")
+                                .attr("x", d => x(d.Start))
+                                .attr("y", (d, i) => y(d.Country) - bar.height/4)
+                                .attr("height", bar.height - 5)
+                                .attr("width", (d) => x(d.End) - x(d.Start))  
+
+                        txt.data(filter_data)
+                            .transition()
+                            .duration(2000)
+                                .attr("fill", "white")
+                                .attr("x", d => x(d.Start) + 10)
+                                .attr("y", (d, i) => y(d.Country) + bar.height/4)
+                                .attr("font-size", 16) 
+                                .text(d=> d.Country) 
+       
                     }
     
-                    d3.select("button").on('change', function(event, d){
+                    d3.select("#button").on('change', function(event, d){
                         const slct_optn = d3.select(this).property("value")
+                        console.log(slct_optn)
                         update(slct_optn)
                     })
-
-
-                        container.append(svg.node());
-            
+                   return svg.node();
                 }
         </script>
         
