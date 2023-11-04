@@ -9,7 +9,7 @@
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
             const color = ({main: "teal", change: "orange"})
 
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
             {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
             {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
@@ -21,6 +21,10 @@
             {"Country": "Argentina4","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983}
              ]
 
+        
+             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}
+            ]
 
     
         </script>
@@ -33,10 +37,22 @@
     <div id="change"></div>
     <div id = "container"></div>       
         <script type="module">
+            
 
-                var sort_opt = ["Start_Date", "End_Date", "Country"]
-                const data = await d3.json("12Data.json")
+                var sort_opt = ["Sort By", "Start_Date", "End_Date", "Country"]
+                var topics_map = featureA.filter(d => get_element(d, "Topics"))[0]
+                
+                var first = topics_map.items[0]
+                topics_map.items[0] = "Countries Topic"
+                topics_map.items.push(first)
+            
 
+                function get_element(value, element){
+                    return (value.feature == element)
+                }
+
+                //const data = await d3.json("12Data.json")
+                //const featureA = await d3.json("12Collective.json") 
 
                 const control_bar = d3.create('div')
                 .attr("width", 1000)
@@ -51,18 +67,36 @@
                 
                 //control_bar.append(dropdown)
                 const dropdown = control_bar.append("select")
-                .attr("id", `button`)
-                .attr("name", 'button')
+                .attr("id", `sorting`)
+                .attr("name", 'sorting')
    
-                const svg_button = d3.select("button")
+                const svg_sort = d3.select("sorting")
 
-                var button = dropdown.selectAll()
+                var sorting_drp = dropdown.selectAll()
                             .data(sort_opt)
                             .join(
                                 enter => enter.append('option')
                             .text(d => d)
                             .attr("value", (d) => d)
                         )
+
+
+                const feature = control_bar.append("select")
+                        .attr("id", `feature`)
+                        .attr("name", 'feature')
+           
+                const svg_button = d3.select("feature")
+        
+                var feat_drp = feature.selectAll()
+                                    .data(topics_map.items)
+                                    .join(
+                                        enter => enter.append('option')
+                                    .text(d => d)
+                                    .attr("value", (d) => d)
+                )
+            
+
+
                 const buttons = ctry_btn.append('li')
 
                 buttons.append('a')
@@ -82,8 +116,8 @@
                 var data = d3.sort(datums, (d) => d.Start_Date)
                 var graphH = d3.count(data, d=> d.Start_Date) * (bar.height + bar.height)
                 // Calculate max of the End year and min of the Start_Date year
-                const maxYear = d3.max(data.map(d => d.End_Date)) + 5;
-                const minYear = d3.min(data.map(d => d.Start_Date)) - 5;
+                var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
+                var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
                 const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 2 * bar.height})
                     
                 
@@ -101,21 +135,22 @@
                 var svg = box.append('svg')
                             .attr("viewBox", [0, 0, wind.width, wind.height]) 
                 
-
-                var years = d3.range(minYear, maxYear, 5)
-            
+                
                 var shaderboxes = svg.append("g")
                     .selectAll("g")
                     .data(data)
                     .join(
-                        enter => enter.append("rect")
-                        .attr("x", bar.graphX)
-                        .attr("y", (d) => y(d.Country) - bar.height/2)
-                        .attr("width", bar.graphW)
-                        .attr("opacity", 0.25)
-                        .attr("height", bar.height + 10)
-                        .attr("fill", function (d, i){ if((i) % 2 == 0){return "grey"} else {return"darkgrey"}})
+                        enter => enter.append("rect"),
+                        update => update,
+                        exit => exit.remove()
                     )
+                    .attr("x", bar.graphX)
+                    .attr("y", (d) => y(d.Country) - bar.height/2)
+                    .attr("width", bar.graphW)
+                    .attr("opacity", 0.25)
+                    .attr("height", bar.height + 10)
+                    .attr("fill", function (d, i){ if((i) % 2 == 0){return "lightgrey"} else {return"lightgrey"}})
+        
 
                 // Add a rect for each bar.
                 var bars = svg.append("g")
@@ -150,7 +185,7 @@
                 bars.on("mouseout", mouseL)
                 bars.on("mousedown", clickdown)  
                 bars.on("mouseup", clickup)
-                //bars.call(drag)
+            
 
                 // Add the x-axis and label.
                var gx = svg.append("g")
@@ -239,33 +274,61 @@
                         .attr("fill", color.main)
                     }
 
-                    function update(selectedGroup){
-                        var filter_data = d3.sort(datums, (d) => d[selectedGroup])
+                    function update_feat(selectedGroup, buttontype){
 
-                        console.log(filter_data[0][selectedGroup])
-                        console.log(filter_data[0].Country)
+                        function has(d, select){
+                            return d == select
+                        }
 
-                        y = d3.scaleBand(filter_data.map(d => d.Country), [0, wind.height])
+                        function zoomed(event){
+                            const {transform} = event;
+                            g.attr("transform", transform);
+                            g.attr("stroke-width", 1 / transform.k);
+                        }
+
+                        function contains(value, select){
+                                var element = value.Topics
+                                var bools = d3.map(element, (d) => has(d, select))
+                                var bool = d3.every(bools, (x) => x == true)
+                                return bool == true
+                        }
+                        var filterdata = datums.filter((d) => contains(d , selectedGroup))
+                        var maxYear = d3.max(filterdata.map(d => d.End_Date)) + 5;
+                        var minYear = d3.min(filterdata.map(d => d.Start_Date)) - 5;
+
+                        y = d3.scaleBand(filterdata.map(d => d.Country), [0, wind.height])
                         .padding(1);
 
                         gy.transition()
-                        .duration(2000)
+                        .duration(500)
                         .attr("transform", `translate(${bar.graphX},0)`)
                         .call(d3.axisLeft(y))
                         .call(g => g.select(".domain").remove())
 
-                        bars.data(filter_data)
-                            .transition()
                         
 
-                        links.data(filter_data)
+                        shaderboxes
+                            .data(filterdata)
+                            .attr("y", (d) => y(d.Country) - bar.height/2)
+                            .attr('opacity', 1)
+                            .exit()
+                            .attr('opacity', 0)
+
+                        bars.data(filterdata)
+                            .attr("y", (d) => y(d.Country) - bar.height/2)
+                            .attr('opacity', 1)
+                            .exit()
+                            .attr('opacity', 0)
+                        
+                        links.data(filterdata)
                                 .transition()
                                 .duration(2000)
                                 .attr("href", d => "https://polychloras.github.io/" + d.Country)
             
-                        ind_time.data(filter_data)
+                        ind_time
+                                .data(filterdata)
                                 .transition()
-                                .duration(2000)
+                                .duration(500)
                                 .attr("fill", color.main)
                                 .attr("stroke", "null")
                                 .attr("x", d => x(d.Start_Date))
@@ -273,24 +336,95 @@
                                 .attr("height", bar.height - 5)
                                 .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))  
 
-                        txt.data(filter_data)
+                        txt.data(filterdata)
                             .transition()
-                            .duration(2000)
+                            .duration(500)
                                 .attr("fill", "white")
                                 .attr("x", d => x(d.Start_Date) + 10)
                                 .attr("y", (d, i) => y(d.Country) + bar.height/4)
                                 .attr("font-size", 16) 
                                 .text(d=> d.Country) 
+                        
        
                     }
     
-                    d3.select("#button").on('change', function(event, d){
+
+                    function update(selectedGroup){
+                        data = d3.sort(datums, (d) => d[selectedGroup])
+
+                        y = d3.scaleBand(data.map(d => d.Country), [0, wind.height])
+                        .padding(1);
+
+                        gy.transition()
+                        .duration(500)
+                        .attr("transform", `translate(${bar.graphX},0)`)
+                        .call(d3.axisLeft(y))
+                        .call(g => g.select(".domain").remove())
+
+                        shaderboxes
+                        .data(data)
+                        .attr("y", (d) => y(d.Country) - bar.height/2)
+                        .attr('opacity', 1)
+
+                        bars.data(data)
+                            .transition()
+                            .attr('opacity', 1)
+
+                        links.data(data)
+                                .transition()
+                                .duration(500)
+                                .attr("href", d => "https://polychloras.github.io/" + d.Country)
+                                .attr('opacity', 1)
+            
+                        ind_time.data(data)
+                                .transition()
+                                .duration(500)
+                                .attr("fill", color.main)
+                                .attr("stroke", "null")
+                                .attr("x", d => x(d.Start_Date))
+                                .attr("y", (d, i) => y(d.Country) - bar.height/4)
+                                .attr("height", bar.height - 5)
+                                .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))  
+                                .attr('opacity', 1)
+
+                        txt.data(data)
+                            .transition()
+                            .duration(500)
+                                .attr("fill", "white")
+                                .attr("x", d => x(d.Start_Date) + 10)
+                                .attr("y", (d, i) => y(d.Country) + bar.height/4)
+                                .attr("font-size", 16) 
+                                .text(d=> d.Country) 
+                                .attr('opacity', 1)
+                        
+
+       
+                    }
+    
+    
+                    d3.select("#sorting").on('change', function(event, d){
                         const slct_optn = d3.select(this).property("value")
-                        console.log(slct_optn)
-                        update(slct_optn)
+                        if(slct_optn != "Sort By"){
+                            update(slct_optn)
+                        }
+                        else{
+                            update('Country')
+                        }
                     })
-                   return svg.node();
-                }
+
+                    d3.select("#feature").on('change', function(event, d){
+                        const slct_optn = d3.select(this).property("value")
+                        if(slct_optn != "Countries Topic"){
+                            update_feat(slct_optn)
+                        }
+                        else{
+                            update('Country')
+                        }
+                    })
+                    return svg.node();
+               
+                    }
+                
         </script>
         
     </body>

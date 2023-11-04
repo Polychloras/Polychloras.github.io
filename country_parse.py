@@ -127,9 +127,24 @@ def clean_all(list_top):
                lines.append(line.strip())
      return lines
 
+def get_categories(country_dict, element):
+     categories = []
+     for country in country_dict:
+          ctry_cat = country[element]
+          
+          if (type(ctry_cat) != list):
+               categories.append(ctry_cat)
+          else:
+               for elements in ctry_cat:               
+                    if(categories.count(elements) < 1):
+                              categories.append(elements)
+          
+     return dict({'feature': element, 'items':categories})
+
 def main():
     folder_name = 'Countries'
     country_dicts = []
+    country_ele = []
     if(not os.path.isdir(folder_name)):
         print("Error")
         exit()
@@ -149,12 +164,22 @@ def main():
             country_new.add_vals(lines)
             table = country_new.add_country()
             country_dicts.append(table)
+            
+        keys = list(country_dicts[0].keys())
 
+        for element in keys:
+             print(element)
+             element_dict = get_categories(country_dicts, element)
+             country_ele.append(element_dict)
+           
         # https://www.geeksforgeeks.org/reading-and-writing-json-to-a-file-in-python/
         countries_json = open('12Data.json', 'w')
         info_dump = json.dumps(country_dicts, indent= 1)
         countries_json.write(info_dump)
 
+        elements_json = open('12Collective.json', 'w')
+        ele_dump = json.dumps(country_ele, indent= 1)
+        elements_json.write(ele_dump)
         
 
 
