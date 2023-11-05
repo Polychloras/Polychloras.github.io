@@ -10,3 +10,8 @@ https://jenkov.com/tutorials/svg/index.html
 https://www.youtube.com/watch?v=aHJCt2adSWA&t=1441s
 https://website.education.wisc.edu/~swu28/d3t/link.html
 https://www.tutorialsteacher.com/d3js/data-binding-in-d3js#data
+https://d3js.org/d3-selection/joining#selection_join
+https://observablehq.com/@d3/hierarchical-bar-chart
+https://observablehq.com/@d3/hierarchical-bar-chart?intent=fork
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+https://www.w3schools.com/js/js_array_iteration.asp

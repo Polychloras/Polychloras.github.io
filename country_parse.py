@@ -14,6 +14,8 @@ class country():
         name_vals = strg.split(':')
         vals = name_vals[1].replace('.', '')
         vals = vals.split(';')
+        for val in range(len(vals)):
+             vals[val] = vals[val].strip()
         self.table.update({name: vals})
 
      def add_vals(self, listed):
@@ -81,6 +83,8 @@ class country():
             topic_date = strg.split('(')
             topics = topic_date[0].replace('and', ',')
             topics = topics.split(',')
+            for topic in range(len(topics)):
+                 topics[topic] =  topics[topic].strip()
             date = topic_date[1].replace(')', '')
             date = date.split('-')
             start = date[0][0:4]

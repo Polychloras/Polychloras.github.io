@@ -1,29 +1,45 @@
+
+
 <!DOCTYPE html>
 <html>
     <head>
         <link rel = stylesheet href="format.css">
         <script src="d3.v7.js"></script>
-        
-        <script>         
+        <script> 
+            /*
+            Name(s): Emily Massie, Mehrdad Yadholli
+            Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+            Date: 10/30/2023
+
+            Script: This html Document is the home-page into the 12-Countries, 
+                    It incorporates a basic map to visulize the girth of time between 
+                    these 12 countries in a fast way. 
+                    
+                    Additionally, the user can filter timelines based on categories or topics 
+                    related to that Country.  
+
+
+
+            */    
+            
+            // Basic Canvas Information 
             const margin = ({top: 30, bottom: 30, left: 30, right: 30});
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
-            const color = ({main: "teal", change: "orange"})
+            const color = ({main: "teal", change: "orange", font:"white", back:"lightgrey"})
 
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
-            {"Country": "Bolivia","Topics": ["military dictatorships "], "Start_Date": 1964, "End_Date": 1982},
-            {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985},
-            {"Country": "Chile","Topics": ["pinochet dictatorship "], "Start_Date": 1973,"End_Date": 1990 },
+            // Dummy Information to test locally
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
+            {"Country": "Bolivia","Topics": ["military dictatorships ", "state violence"], "Start_Date": 1964, "End_Date": 1982},
+            {"Country": "Brazil","Topics": [ "military dictatorship ", "state violence"],"Start_Date": 1964,"End_Date": 1985},
+            {"Country": "Chile","Topics": ["pinochet dictatorship ", "state violence"], "Start_Date": 1973,"End_Date": 1990 },
             {"Country": "Colombia", "Topics": [ "internal armed conflict "],"Start_Date": 1960,"End_Date": 2016},
-            {"Country": "Ecuador","Topics": ["state violence"," human rights violations "," political instability "],"Start_Date": 1983,"End_Date": 2008},
-            {"Country": "Argentina1","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
-            {"Country": "Argentina2","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
-            {"Country": "Argentina3","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983},
-            {"Country": "Argentina4","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983}
+            {"Country": "Ecuador","Topics": [" human rights violations "," political instability "],"Start_Date": 1983,"End_Date": 2008}
              ]
 
         
-             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
-             {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}
+             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}, {
+             "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
 
     
@@ -37,26 +53,37 @@
     <div id="change"></div>
     <div id = "container"></div>       
         <script type="module">
-                const data = await d3.json("12Data.json")
-                const featureA = await d3.json("12Collective.json") 
+                //const data = await d3.json("12Data.json")
+                //const featureA = await d3.json("12Collective.json") 
 
-                var sort_opt = ["Sort By", "Start_Date", "End_Date", "Country"]
-                var topics_map = featureA.filter(d => get_element(d, "Topics"))[0]
-                
-                var first = topics_map.items[0]
-                topics_map.items[0] = "Countries Topic"
-                topics_map.items.push(first)
-            
-
+                // Function that grabs the items based on type
                 function get_element(value, element){
                     return (value.feature == element)
                 }
 
+                // Build Button Options for user to select
+                var sort_opt = ["Sort By", "Start_Date", "End_Date", "Country"]
+                var topics_map = featureA.filter(d => get_element(d, "Topics"))[0]
+                var cat_map = featureA.filter(d => get_element(d, 'Categories'))[0]
 
+                //add defualt option to Topics dropdown
+                var first = topics_map.items[0]
+                topics_map.items[0] = "Countries Topic"
+                topics_map.items.push(first)
+            
+               //add defualt option to Categories dropdown
+               first = cat_map.items[0]
+               cat_map.items[0] = "Countries Categories"
+               cat_map.items.push(first)
+//=============================================================================
+//    Display Construction of Navabar  
+//============================================================================
+                // build container to display Naviagtion
                 const control_bar = d3.create('div')
                 .attr("width", 1000)
                 .attr("height", 50)
 
+                // add a navigation bar for users
                 const navbar = control_bar.append('nav')
                 
                 const ctry_btn = navbar.append('ul')               
@@ -64,13 +91,15 @@
                     .data(data)
                     .join('li')
                 
-                //control_bar.append(dropdown)
+                // add a dropdown for sorting all countries
+                // https://d3-graph-gallery.com/graph/line_select.html
                 const dropdown = control_bar.append("select")
                 .attr("id", `sorting`)
                 .attr("name", 'sorting')
    
                 const svg_sort = d3.select("sorting")
 
+                // add options to dropmenu
                 var sorting_drp = dropdown.selectAll()
                             .data(sort_opt)
                             .join(
@@ -79,7 +108,7 @@
                             .attr("value", (d) => d)
                         )
 
-
+                // add drop down for Topics
                 const feature = control_bar.append("select")
                         .attr("id", `feature`)
                         .attr("name", 'feature')
@@ -94,8 +123,22 @@
                                     .attr("value", (d) => d)
                 )
             
+                // add dropdown for Categories
+                const category = control_bar.append("select")
+                        .attr("id", `cat`)
+                        .attr("name", 'cat')
+           
+                const cat_button = d3.select("cat")
+        
+                var cat_drp = category.selectAll()
+                                    .data(cat_map.items)
+                                    .join(
+                                        enter => enter.append('option')
+                                    .text(d => d)
+                                    .attr("value", (d) => d)
+                )
 
-
+                // add all navigation btns to navbar
                 const buttons = ctry_btn.append('li')
 
                 buttons.append('a')
@@ -104,23 +147,33 @@
             
                 change.append(control_bar.node())
 
+//=============================================================================
+//    Display Construction of Timelines  
+//============================================================================
+                // call and build timeline
                 var timeline = TimeData(data, bar)
-
                 container.append(timeline);
 
 
-                
+                // Function that build an instances of timeline collective
+                // retireves data to display and dict of size components
+                // return svg 
                 function TimeData(datums, bar){
-
+                
+                // Sort Data based on Start Date (defualt)
                 var data = d3.sort(datums, (d) => d.Start_Date)
+
+                //calculate height of graph
                 var graphH = d3.count(data, d=> d.Start_Date) * (bar.height + bar.height)
+
                 // Calculate max of the End year and min of the Start_Date year
                 var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
                 var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
                 const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 2 * bar.height})
                     
                 
-                const x = d3.scaleLinear()
+                // initlize x and y axis
+                var x = d3.scaleLinear()
                         .domain([minYear, maxYear])
                         .range([bar.graphX, bar.graphW]);
 
@@ -128,13 +181,15 @@
                         .padding(1);
                 
                                
-
+                // select div container to manipulate
                 var box = d3.select("#container")
-                            
+                 
+                // add a svg object into container div
                 var svg = box.append('svg')
                             .attr("viewBox", [0, 0, wind.width, wind.height]) 
                 
                 
+                // add line boxes to see y axis better
                 var shaderboxes = svg.append("g")
                     .selectAll("g")
                     .data(data)
@@ -146,12 +201,11 @@
                     .attr("x", bar.graphX)
                     .attr("y", (d) => y(d.Country) - bar.height/2)
                     .attr("width", bar.graphW)
-                    .attr("opacity", 0.25)
                     .attr("height", bar.height + 10)
-                    .attr("fill", function (d, i){ if((i) % 2 == 0){return "lightgrey"} else {return"lightgrey"}})
+                    .attr("fill", function (d, i){ if((i) % 2 == 0){return color.back} else {return color.back}})
         
 
-                // Add a rect for each bar.
+                // Add a rect for each country.
                 var bars = svg.append("g")
                         .attr("fill", color.main)
                         .attr("stroke", "null")
@@ -159,10 +213,11 @@
                     .data(data)
                     .join("g")
 
-                
+                // link bar to website containg indv country info
                 var links = bars.append("a")
                     .attr("href", d => "https://polychloras.github.io/" + d.Country)
 
+                // add rect reprsenting time duration of events for countries
                 var ind_time = links.append("rect")
                     .attr("fill", color.main)
                     .attr("stroke", "null")
@@ -172,21 +227,23 @@
                     .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))           
 
 
-
+                // display country title
                 var txt = bars.append("text")
-                        .attr("fill", "white")
+                        .attr("fill", color.font)
                         .attr("x", d => x(d.Start_Date) + 10)
                         .attr("y", (d, i) => y(d.Country) + bar.height/4)
                         .attr("font-size", 16) 
                         .text(d=> d.Country)     
-                    
+                
+                // add interactivity to see clicking action and highlight dates on x-axis
                 bars.on("mouseover", mouseO) 
                 bars.on("mouseout", mouseL)
-                bars.on("mousedown", clickdown)  
-                bars.on("mouseup", clickup)
-            
 
-                // Add the x-axis and label.
+            
+// =======================================================================================
+//                 Interactivity Functions
+// ========================================================================================
+
                var gx = svg.append("g")
                     .attr("transform", `translate(0,${graphH + bar.height})`)
                     .attr("fill", color.main)
@@ -194,7 +251,7 @@
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                     .tickSizeOuter(0))
                    
-
+                // add y axis and label
                 var gy = svg.append("g")
                     .attr("transform", `translate(${bar.graphX},0)`)
                     .call(d3.axisLeft(y))
@@ -205,29 +262,30 @@
                         .attr("y", 10)
                         .attr("fill", "currentColor"))
 
-                      // prevent scrolling then apply the default filter
+                    // prevent scrolling then apply the default filter
                     function filter(event) {
                             event.preventDefault();
                             return (!event.ctrlKey || event.type === 'wheel') && !event.button;
                      }
                 
-        
+
+                
+                     // determines when mouse is no longer over country time line
                     function mouseL(event, d, i){                  
                             // Hide vertical lines and dates along the timeline
                             svg.selectAll(".timeline-hover").remove();
                         
                             // Reset the label position to original
-                            const label = d3.select(this).select("text");
-                        
+                            const label = d3.select(this).select("text");                  
                                 label.interrupt() // Stop any active transition
                                 .transition()
                                 .duration(2000)
-                                .ease(d3.easeQuadInOut)
-                            
+                                .ease(d3.easeQuadInOut)   
                     }
 
-                    function mouseO(event, d){
-        
+                    // Displays the Start and End Date when mouse hovers over country time-line
+                    // https://observablehq.com/@liuyao12/timeline
+                    function mouseO(event, d){     
                         // Show vertical lines and dates along the timeline
                         const lineGroup = svg.append("g")
                             .attr("class", "timeline-hover")
@@ -252,60 +310,69 @@
                         .attr("x", x(d.Start_Date))
                         .attr("y", graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
-                        .attr("fill", color.change); // Display Start date in red
+                        .attr("fill", color.change); // Display Start date in orange
     
                         lineGroup.append("text")
                         .text(d.End_Date)
                         .attr("x", x(d.End_Date))
                         .attr("y",  graphH + bar.height * 2)
                         .attr("text-anchor", "middle")
-                        .attr("fill", color.change); // Display End date in red
+                        .attr("fill", color.change); // Display End date in orang
                     }
 
-                    function clickdown(event, d){
-                        d3.select(this).transition()
-                            .attr("fill", color.change)
-
-                    }
-
-                    function clickup(event, d){
-                        d3.select(this).transition()
-                        .attr("fill", color.main)
-                    }
-
+                    // update_feat: updates timeline to only display countries 
+                    //                  with cooresponding select in Topic/cat
+                    //
+                    // returns nothing
                     function update_feat(selectedGroup, buttontype){
 
+                        // has -> takes in data element and searches for select
+                        // finds if topic/category exists for country
                         function has(d, select){
                             return d == select
                         }
 
-                        function zoomed(event){
-                            const {transform} = event;
-                            g.attr("transform", transform);
-                            g.attr("stroke-width", 1 / transform.k);
-                        }
-
+                        // contains -> takes in data value and element to search each country for
+                        // returns true if contry has element and false otherwise
                         function contains(value, select){
                                 var element = value.Topics
                                 var bools = d3.map(element, (d) => has(d, select))
-                                var bool = d3.every(bools, (x) => x == true)
+                                var bool = d3.some(bools, (x) => x == true)
                                 return bool == true
                         }
+
+                        // shrink data filtering out countries that do not have the related keyword
                         var filterdata = datums.filter((d) => contains(d , selectedGroup))
                         var maxYear = d3.max(filterdata.map(d => d.End_Date)) + 5;
                         var minYear = d3.min(filterdata.map(d => d.Start_Date)) - 5;
 
+                        //update x axis
+                        x = d3.scaleLinear()
+                        .domain([minYear, maxYear])
+                        .range([bar.graphX, bar.graphW]);
+
+                        // update y axis
                         y = d3.scaleBand(filterdata.map(d => d.Country), [0, wind.height])
                         .padding(1);
 
+                        // add transition to x
+                        gx.transition()
+                        .duration(500)
+                        .attr("transform", `translate(0,${graphH + bar.height})`)
+                        .attr("fill", color.main)
+                        .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                        .tickFormat(d3.format(".0f")) // Add this line to change the tick format
+                        .tickSizeOuter(0))
+
+                        // add transition to y
                         gy.transition()
                         .duration(500)
                         .attr("transform", `translate(${bar.graphX},0)`)
                         .call(d3.axisLeft(y))
                         .call(g => g.select(".domain").remove())
 
-                        
-
+                        // update all related elements in timeline
+                        // in order update [grid shading, bar container, links, timelines, country name]
                         shaderboxes
                             .data(filterdata)
                             .attr("y", (d) => y(d.Country) - bar.height/2)
@@ -338,7 +405,7 @@
                         txt.data(filterdata)
                             .transition()
                             .duration(500)
-                                .attr("fill", "white")
+                                .attr("fill", color.font)
                                 .attr("x", d => x(d.Start_Date) + 10)
                                 .attr("y", (d, i) => y(d.Country) + bar.height/4)
                                 .attr("font-size", 16) 
@@ -348,18 +415,46 @@
                     }
     
 
+                    // update: alters information in timeline to display in a specified sorting meathod
+                    //
+                    // returns nothing
                     function update(selectedGroup){
+                        // sort data based on user selection
                         data = d3.sort(datums, (d) => d[selectedGroup])
 
+                        // get max and min year of time to display for all countries
+                        var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
+                        var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
+
+                        // update x-axis
+                        x = d3.scaleLinear()
+                        .domain([minYear, maxYear])
+                        .range([bar.graphX, bar.graphW]);
+
+                        // make x transition
+                        gx.transition()
+                        .duration(500)
+                        .attr("transform", `translate(0,${graphH + bar.height})`)
+                        .attr("fill", color.main)
+                        .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                        .tickFormat(d3.format(".0f")) // Add this line to change the tick format
+                        .tickSizeOuter(0))
+
+
+                        // update y-axis
                         y = d3.scaleBand(data.map(d => d.Country), [0, wind.height])
                         .padding(1);
 
+                        //make y transition
                         gy.transition()
                         .duration(500)
                         .attr("transform", `translate(${bar.graphX},0)`)
                         .call(d3.axisLeft(y))
                         .call(g => g.select(".domain").remove())
 
+
+                        // update all related elements in timeline
+                        // in order update [grid shading, bar container, links, timelines, country name]
                         shaderboxes
                         .data(data)
                         .attr("y", (d) => y(d.Country) - bar.height/2)
@@ -389,7 +484,7 @@
                         txt.data(data)
                             .transition()
                             .duration(500)
-                                .attr("fill", "white")
+                                .attr("fill", color.font)
                                 .attr("x", d => x(d.Start_Date) + 10)
                                 .attr("y", (d, i) => y(d.Country) + bar.height/4)
                                 .attr("font-size", 16) 
@@ -400,9 +495,13 @@
        
                     }
     
-    
+                    
+                    // get selection for sorting dropdown
                     d3.select("#sorting").on('change', function(event, d){
+                        // get option selected
                         const slct_optn = d3.select(this).property("value")
+
+                        // check if defualt was selected
                         if(slct_optn != "Sort By"){
                             update(slct_optn)
                         }
@@ -411,8 +510,12 @@
                         }
                     })
 
+                     // get selection for sorting dropdown
                     d3.select("#feature").on('change', function(event, d){
+                        // get option selected
                         const slct_optn = d3.select(this).property("value")
+
+                         // check if defualt was selected
                         if(slct_optn != "Countries Topic"){
                             update_feat(slct_optn)
                         }
