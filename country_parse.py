@@ -25,6 +25,7 @@ class country():
         self.set_listed_vals(listed[2], 'Categories')
         self.set_listed_vals(listed[3], 'Actors')
         
+        
         if(listed[4] == 'Key historical events'):
              self.table.update({'Summary':""})
              b = self.set_events(listed, 5)
