@@ -15,7 +15,7 @@ class country():
         vals = name_vals[1].replace('.', '')
         vals = vals.split(';')
         for val in range(len(vals)):
-             vals[val] = vals[val].strip()
+             vals[val] = vals[val].lower().strip()
         self.table.update({name: vals})
 
      def add_vals(self, listed):
@@ -89,7 +89,7 @@ class country():
             date = date.split('-')
             start = date[0][0:4]
             if(not date[1] == ''):
-                end = date[1].strip()
+                end = date[1].strip().lower()
             else:
                 end = '2023'
             self.table.update({'Topics':topics})
