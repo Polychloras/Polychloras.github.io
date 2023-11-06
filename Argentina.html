@@ -26,7 +26,7 @@
         const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
         // Dummy Information to test locally
-        var datas = [
+        var data = [
         {
         "Country": "Argentina",
         "Topics": [
@@ -443,22 +443,9 @@
             </head>
 <body>
     <body>
-        <h1>
-            <b>Argentina</b>
-        </h1>
 
-        <h1>
-            <b>Dictatorship (1976-1983)</b>
-        </h1>
-
-        <p>
-            <a href="https://en.wikipedia.org/wiki/Mothers_of_the_Plaza_de_Mayo">Visit wikipedia.org!</a>
-        </p>
-
-        <p>
-                <img src="Argentina.jpg" alt="Argentina" width="600" height="500">   
-        </p>
-
+        <div id = "title"></div>
+        <div id="cat"></div>
         <p>
             <b>Categories:</b> Dictatorship; coup; Operation Condor; international armed conflict; truth commission; state museum; memorial sites.
         </p>
@@ -519,13 +506,18 @@
         </p>
               <script  type="module">
 
-                var country = "Argentina"
-                const data = await d3.json("12Data.json")
+               
+                //const data = await d3.json("12Data.json")
 
+                var country = "Argentina" //Change This to name of country
+
+                // find country: finds the country's index in the data file
+                // inputs: country name, list of data obj
+                // returns country index
                 function find_country(country, data_c){
                     let index = null
 
-
+                    //search for index
                     for(let i = 0; i< data_c.length; i++){
                         if(data_c[i].Country == (country)){
                             return i
@@ -534,24 +526,103 @@
                     return index
                 }
 
-
+                // save country's information for extraction
                 var index = find_country(country, data)
+                var country = data[index]
 
+//======================================================================================
+//  Build Title Page:
+//=======================================================================================               
+                const header = d3.select("#title") 
+                        
+                // add title
+                var country_hd = header
+                                .append('h1')
+                                .text(country.Country)
+                                .append('br')
+                // add topics with range
+                var hd_top = header
+                            .append('g')
+                            .append('h2')
+                            .text('Main Topics from ('+ country.Start_Date + '-' + country.End_Date + '): ')
+                            .selectAll()
+                            .data(country.Topics)
+                            .join('ul')
+
+                // list all topics                    
+                hd_top
+                .append('li')
+                .text(d=>d)
+
+                // add photo s link to source and photo title Change this
+                var img = header.append('a')
+                                .attr('href', "https://en.wikipedia.org/wiki/Mothers_of_the_Plaza_de_Mayo")
+
+                img.append('img')
+                    .attr('src', "Argentina.jpg")
+                    .attr('alt',"Argentina")
+                    .attr('width',"600")
+                    .attr('height',"500")
+                    
+
+                header
+                       .append('div')
+                       .text('Photo: Mothers_of_the_Plaza_de_Mayo')
+                      .append('br')
+
+                header.append('text')
+                      .attr('fill', 'red')
+                      .text('Click Photo to head to wiki source')
+
+                //Select div containor and begin adding tieline information
                 const svg = d3.select("#events").append('svg')
                 .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*5]) 
 
-                var country = data[index]
+ //======================================================================================
+//  Build Categories
+//=======================================================================================  
 
+                const categ_title =d3.select('#cat')
+                                .append('h1')
+                                .text("Categories")
+                                .append('br')
+
+                const categ = d3.select('#cat').append('svg')
+                                .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*6])
+                           
+                
+
+                var add_cat = categ.append('g')
+                                    .selectAll('svg')
+                                    .data(country.Categories)
+                                    .join('g')
+
+                 add_cat.append('circle')
+                 .attr('fill', color.main)
+                 .attr('cx', (d, i) => (i+1)*(bar.height+ bar.width+5)*4)
+                 .attr('cy', bar.graphH + bar.height*2)
+                 .attr('r', (bar.height+ bar.width)*2)
+
+                 add_cat.append('text')
+                 .attr('x', (d, i) => (i+1)*(bar.height+ bar.width+5)*3)
+                 .attr('y', bar.graphH + bar.height*2)
+                 .text(d=> d)
+                 
+
+
+//======================================================================================
+//  Build Timeline of Events
+//=======================================================================================
                 var events_line = svg.append('g')
                                     .selectAll('g')
                                     .data(country.Events.Dates)
                                     .join("g")
 
-                                // initlize x and y axis
+                // initlize x axis
                 var max_date = d3.max(country.Events.Dates)
                 var min_date = d3.min(country.Events.Dates)
-                //console.log(max)
-
+                
+                // build timeline
                 var x = d3.scaleLinear()
                 .domain([min_date, max_date])
                 .range([bar.graphX, bar.graphW]);
@@ -564,13 +635,14 @@
                 .tickSizeOuter(0))
                 .attr("font-size", 18)
                 
+                // draw a circle for each event
                 events_line.append("circle")
                 .attr("cx", d => x(d) - 50)
                 .attr("cy", bar.height*4)
                 .attr("r", 15)
                 .attr("fill", color.main)
 
-               
+               //add interactivity action based on mouse clicking
                 events_line.on('mousedown', newclick)
                 events_line.on('click', clicked)
 
@@ -590,13 +662,14 @@
                         var text = ""
                         var eventBox = svg.append("span")
                         .attr("class", "text")
+                        .attr('font-size', 18)
+                        .attr('font-type', 'bold')
+                        .attr("font-color", color.change)
+
                         for(let i = 0; i < country.Events.Dates.length; i++){
                                 if(date == country.Events.Dates[i]){
 
                                     eventBox.append("text")
-                                    .attr('font-size', 18)
-                                    .attr('font-type', 'normal')
-                                    .attr("font-color", color.change)
                                     .text(country.Events.Events[i])
 
                                     eventBox.append('br')
@@ -611,7 +684,7 @@
                     var eventbox = info.append('div')  
                     find_Events(d, country, eventbox)
                 }
-
+                title.append(header.node())
                 events.append(svg.node())
               </script>
 
