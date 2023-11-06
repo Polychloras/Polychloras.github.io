@@ -61,6 +61,16 @@
             .attr('width', width)
             .attr('height', height);
 
+        const yearLabels = d3.range(1950, 2026, 5); // Labels for every 5 years
+        svg.selectAll('.year-label')
+            .data(yearLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'year-label')
+            .attr('x', year => xScale(new Date(year, 0, 1)))
+            .attr('y', 20) // Adjust the vertical position as needed
+            .text(year => year);
+
         const eventsGroup = svg.selectAll('.events-group')
             .data(data)
             .enter()
@@ -68,10 +78,7 @@
             .attr('class', 'events-group');
 
         eventsGroup.selectAll('.event')
-        const yearLabels = d3.range(1950, 2026, 1); // Labels every 1 years
-        svg.selectAll('.year-label')
-            .data(yearLabels)
-           
+            .data(d => d.events)
             .enter()
             .append('rect')
             .attr('class', 'event')
