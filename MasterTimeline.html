@@ -28,7 +28,7 @@
             const color = ({main: "teal", change: "green", font:"white", back:"lightgrey"})
 
             // Dummy Information to test locally
-            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983, "Categories": ["Dictatorship", "coup","Operation Condor","international armed conflict","truth commission","state museum","memorial sites"],},
+            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983, "Categories": ["Dictatorship", "coup","Operation Condor","international armed conflict","truth commission","state museum","memorial sites"],},
             {"Country": "Bolivia","Topics": ["military dictatorships ", "state violence"], "Start_Date": 1964, "End_Date": 1982,  "Categories": ["Dictatorship","coup","Operation Condor","reparation law","truth commission","indigenous peoples"]},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985, "Categories":[]},
             {"Country": "Chile","Topics": ["pinochet dictatorship ", "state violence"], "Start_Date": 1973,"End_Date": 1990, "Categories":[] },
@@ -37,7 +37,7 @@
              ]
 
         
-             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
              {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}, {
              "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
@@ -56,8 +56,8 @@
     <div id = "dates"></div>      
 
         <script type="module">
-                //const data = await d3.json("12Data.json")
-                //const featureA = await d3.json("12Collective.json") 
+                const data = await d3.json("12Data.json")
+                const featureA = await d3.json("12Collective.json") 
 
                 // Function that grabs the items based on type
                 function get_element(value, element){
