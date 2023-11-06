@@ -28,7 +28,7 @@
             const color = ({main: "teal", change: "green", font:"white", back:"lightgrey"})
 
             // Dummy Information to test locally
-            var datas = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983, "Categories": ["Dictatorship", "coup","Operation Condor","international armed conflict","truth commission","state museum","memorial sites"],},
+            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983, "Categories": ["Dictatorship", "coup","Operation Condor","international armed conflict","truth commission","state museum","memorial sites"],},
             {"Country": "Bolivia","Topics": ["military dictatorships ", "state violence"], "Start_Date": 1964, "End_Date": 1982,  "Categories": ["Dictatorship","coup","Operation Condor","reparation law","truth commission","indigenous peoples"]},
             {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985, "Categories":[]},
             {"Country": "Chile","Topics": ["pinochet dictatorship ", "state violence"], "Start_Date": 1973,"End_Date": 1990, "Categories":[] },
@@ -37,7 +37,7 @@
              ]
 
         
-             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
              {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}, {
              "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
@@ -56,8 +56,8 @@
     <div id = "dates"></div>      
 
         <script type="module">
-                const data = await d3.json("12Data.json")
-                const featureA = await d3.json("12Collective.json") 
+                //const data = await d3.json("12Data.json")
+                //const featureA = await d3.json("12Collective.json") 
 
                 // Function that grabs the items based on type
                 function get_element(value, element){
@@ -305,7 +305,7 @@
                 var txt = bars.append("text")
                         .attr("fill", color.font)
                         .attr("x", d => x(d.Start_Date) + 10)
-                        .attr("y", (d, i) => y(d.Country) + bar.height/4)
+                        .attr("y", (d, i) => y(d.Country)+5)
                         .attr("font-size", 16) 
                         .text(d=> d.Country)     
                 
@@ -458,12 +458,16 @@
                             .attr('opacity', 1)
                             .exit()
                             .attr('opacity', 0)
-                        
-                        links.data(data)
-                                .transition()
-                                .duration(2000)
-                                .attr("href", d => "https://polychloras.github.io/" + d.Country)
-            
+                     
+
+                        txt.data(data)
+                            .transition()
+                            .duration(500)
+                                .attr("fill", color.font)
+                                .attr("x", d => x(d.Start_Date) + 10)
+                                .attr("y", d => (y(d.Country) + 10))
+                                .attr("font-size", 16) 
+                                .text(d=> d.Country) 
                         ind_time
                                 .data(data)
                                 .transition()
@@ -473,28 +477,45 @@
                                 .attr("x", d => x(d.Start_Date))
                                 .attr("y", (d, i) => y(d.Country) - bar.height/4)
                                 .attr("height", bar.height - 5)
-                                .attr("width", (d) => x(d.End_Date) - x(d.Start_Date))  
+                                .attr("width", (d) => x(d.End_Date) - x(d.Start_Date)) 
 
-                        txt.data(data)
-                            .transition()
-                            .duration(500)
-                                .attr("fill", color.font)
-                                .attr("x", d => x(d.Start_Date) + 10)
-                                .attr("y", (d, i) => y(d.Country) + bar.height/4)
-                                .attr("font-size", 16) 
-                                .text(d=> d.Country) 
+
+
+                        links.data(data)
+                                .attr("href", d => "https://polychloras.github.io/" + d.Country)  
+                                .transition()
+                                .duration(2000) 
                         
        
                     }
     
-                    function updateMinAxis(selectedGroup){
+                    function updateAxis(selectedmin, selectedmax){
                                                 // get max and min year of time to display for all countries
                         var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
                         var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
 
+                        function calc_width(d, min, max){
+                            if(d.Start_Date > min){
+                                if(d.End_Date < max){
+                                    return (x(d.End_Date) - x(d.Start_Date))
+                                }
+                                else{
+                                    return (x(max) - x(d.Start_Date))
+                                }
+                            }
+                            else{
+                                if(d.End_Date < max){
+                                    return  (x(d.End_Date) - x(selectedmin))
+                                }
+                                else{
+                                    return  (x(max) - x(selectedmin))
+                                }
+                            }
+                        }
+
                         // update x-axis
                         x = d3.scaleLinear()
-                        .domain([selectedGroup, maxYear])
+                        .domain([selectedmin, selectedmax])
                         .range([bar.graphX, bar.graphW]);
 
                         // make x transition
@@ -523,20 +544,23 @@
                                 .duration(500)
                                 .attr("fill", color.main)
                                 .attr("stroke", "null")
-                                .attr("x", d => (d.Start_Date > selectedGroup)? x(d.Start_Date):x(selectedGroup))
+                                .attr("x", d => (d.Start_Date > selectedmin)? x(d.Start_Date):x(selectedmin))
                                 .attr("y", (d, i) => y(d.Country) - bar.height/4)
                                 .attr("height", bar.height - 5)
-                                .attr("width", (d) => (d.Start_Date > selectedGroup)?  (x(d.End_Date) - x(d.Start_Date)):  (x(d.End_Date) - x(selectedGroup)))  
+                                .attr("width", d => calc_width(d, selectedmin, selectedmax))  
 
                         txt.data(data)
                             .transition()
                             .duration(500)
                                 .attr("fill", color.font)
-                                .attr("x", d =>(d.Start_Date > selectedGroup)? x(d.Start_Date) + 10 :x(selectedGroup) + 10)
-                                .attr("y", (d, i) => y(d.Country) + bar.height/4)
+                                .attr("x", d =>(d.Start_Date > selectedmin)? x(d.Start_Date) + 10 : x(selectedmin) + 10)
+                                .attr("y", (d, i) => (y(d.Country) + 10 ))
                                 .attr("font-size", 16) 
                                 .text(d=> d.Country) 
                     }
+
+
+
                     // update: alters information in timeline to display in a specified sorting meathod
                     //
                     // returns nothing
@@ -608,9 +632,9 @@
                             .duration(500)
                                 .attr("fill", color.font)
                                 .attr("x", d => x(d.Start_Date) + 10)
-                                .attr("y", (d, i) => y(d.Country) + bar.height/4)
+                                .attr("y", (d, i) => (y(d.Country) + 10 ))
                                 .attr("font-size", 16) 
-                                .text(d=> d.Country) 
+                                .text(d => d.Country) 
                                 .attr('opacity', 1)
                         
 
@@ -668,11 +692,20 @@
                
                 
                     d3.select('#mindate').on('change', function(event, d){
-                        const slct_optn = d3.select(this).property("value")
+                        const min = d3.select(this).property("value")
+                        const max = d3.select('#maxdate').property("value")
+                       
                                                 // update x-axis
-                        updateMinAxis(slct_optn)
+                        updateAxis(min, max)
                     })
 
+                    d3.select('#maxdate').on('change', function(event, d){
+                        const max = d3.select(this).property("value")
+                        const min = d3.select('#mindate').property("value")
+                                                // update x-axis
+                       
+                        updateAxis(min, max)
+                    })
 
                     return svg.node();
                 }     

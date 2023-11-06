@@ -61,10 +61,7 @@ class country():
           self.meminit.update({'Dates':dates})
           self.meminit.update({"Event": events})
                
-          return c
-
-            
-            
+          return c       
 
      def set_sites(self, listed, c):
           d = listed.index('Organisations')
