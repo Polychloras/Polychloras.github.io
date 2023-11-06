@@ -24,11 +24,11 @@
             
             // Basic Canvas Information 
             const margin = ({top: 30, bottom: 30, left: 30, right: 30});
-            const bar = ({graphX:100, graphY: 0, graphW: 1000, width: 20, height: 20})
+            const bar = ({graphX:100, graphY: 0, graphW: 1000, width: 20, height: 18})
             const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
             // Dummy Information to test locally
-            var datas = [
+            var data = [
             {
             "Country": "Argentina",
             "Topics": [
@@ -434,7 +434,7 @@
             "Movimiento de V\u00edctimas de Cr\u00edmenes de Estado (MOVICE)": " an umbrella organisation for victims of human right violations perpetrated by state forces or paramilitary groups.","Comisi\u00f3n Nacional de Reparaci\u00f3n y Restauraci\u00f3n (CNRR)": " a body established by the Ley 975. It comprises the Grupo de Memoria Hist\u00f3rica (GMH), an investigative unit that has published reports on the armed conflict.","Comisi\u00f3n para el Esclarecimiento de la Verdad, la Convivencia y la No Repetici\u00f3n (CEV)": " a body created after the 2016 agreement, to investigate the armed conflict and provide a path to reconciliation.","Consejer\u00eda Presidencial para los Derechos Humanos y el Derecho Internacional Humanitario": " the state body currently in charge of coordinating state actions in line with the promotion of human rights"}}]
               
         
-             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
              {"feature": "Topics","items": ["dictatorship","military dictatorships","military dictatorship","pinochet dictatorship","internal armed conflict","state violence", " human rights violations","political instability","civil war","stroessner dictatorship","social crises","bolivarian revolution"]}, {
              "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
@@ -453,8 +453,8 @@
     <div id = "dates"></div>      
 
         <script type="module">
-                const data = await d3.json("12Data.json")
-                const featureA = await d3.json("12Collective.json") 
+                //const data = await d3.json("12Data.json")
+               // const featureA = await d3.json("12Collective.json") 
 
                 // Function that grabs the items based on type
                 function get_element(value, element){
@@ -601,7 +601,7 @@
                 // Calculate max of the End year and min of the Start_Date year
                 var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
                 var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
-                const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 5 * bar.height})
+                const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 4 * bar.height})
                     
                 
                 // initlize x and y axis
@@ -713,7 +713,7 @@
 // ========================================================================================
 
                var gx = svg.append("g")
-                    .attr("transform", `translate(0,${graphH + bar.height*3})`)
+                    .attr("transform", `translate(0,${graphH + bar.height*2})`)
                     .attr("fill", color.main)
                     .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0)
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
@@ -751,7 +751,7 @@
                                         enter => enter.append("circle")
                                         .attr("class", "events")
                                         .attr("cx", d => x(d))
-                                        .attr("cy", y(country) + bar.height/7)
+                                        .attr("cy", y(country) + bar.height/5)
                                         .attr("r", bar.width/2)
                                         .attr("fill", color.event)
                                         .attr("opacity", 0.45)
@@ -802,27 +802,27 @@
                         .attr("x1", x(d.Start_Date))
                         .attr("x2", x(d.Start_Date))
                         .attr("y1", y(d.Country)) // Start from the bottom of the bar
-                        .attr("y2", graphH + bar.height* 3.5)
+                        .attr("y2", graphH + bar.height* 2)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("line")
                         .attr("x1", x(d.End_Date))
                         .attr("x2", x(d.End_Date))
                         .attr("y1",  y(d.Country)) //start from the bottom of the bar
-                        .attr("y2", graphH+ bar.height* 3.5)
+                        .attr("y2", graphH+ bar.height* 2)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("text")
                         .text(d.Start_Date)
                         .attr("x", x(d.Start_Date))
-                        .attr("y", graphH + bar.height * 4.5)
+                        .attr("y", graphH + bar.height * 2.5)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display Start date in orange
     
                         lineGroup.append("text")
                         .text(d.End_Date)
                         .attr("x", x(d.End_Date))
-                        .attr("y",  graphH + bar.height * 4.5)
+                        .attr("y",  graphH + bar.height * 2.5)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display End date in orang
                     }
