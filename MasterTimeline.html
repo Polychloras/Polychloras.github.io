@@ -596,12 +596,12 @@
                 var data = d3.sort(datums, (d) => d.Start_Date)
 
                 //calculate height of graph
-                var graphH = d3.count(data, d=> d.Start_Date) * (bar.height + bar.height)
+                var graphH = d3.count(data, d=> d.Start_Date) * (bar.height * 3)
 
                 // Calculate max of the End year and min of the Start_Date year
                 var maxYear = d3.max(data.map(d => d.End_Date)) + 5;
                 var minYear = d3.min(data.map(d => d.Start_Date)) - 5;
-                const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 2 * bar.height})
+                const wind = ({width: bar.graphW + 2 * bar.height, height: graphH + 5 * bar.height})
                     
                 
                 // initlize x and y axis
@@ -713,9 +713,9 @@
 // ========================================================================================
 
                var gx = svg.append("g")
-                    .attr("transform", `translate(0,${graphH + bar.height})`)
+                    .attr("transform", `translate(0,${graphH + bar.height*3})`)
                     .attr("fill", color.main)
-                    .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                    .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0)
                     .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                     .tickSizeOuter(0))
                    
@@ -802,27 +802,27 @@
                         .attr("x1", x(d.Start_Date))
                         .attr("x2", x(d.Start_Date))
                         .attr("y1", y(d.Country)) // Start from the bottom of the bar
-                        .attr("y2", graphH + bar.height)
+                        .attr("y2", graphH + bar.height* 3.5)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("line")
                         .attr("x1", x(d.End_Date))
                         .attr("x2", x(d.End_Date))
                         .attr("y1",  y(d.Country)) //start from the bottom of the bar
-                        .attr("y2", graphH+ bar.height)
+                        .attr("y2", graphH+ bar.height* 3.5)
                         .style("stroke", "rgba(225,0,0,0.3)");
 
                         lineGroup.append("text")
                         .text(d.Start_Date)
                         .attr("x", x(d.Start_Date))
-                        .attr("y", graphH + bar.height * 2)
+                        .attr("y", graphH + bar.height * 4.5)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display Start date in orange
     
                         lineGroup.append("text")
                         .text(d.End_Date)
                         .attr("x", x(d.End_Date))
-                        .attr("y",  graphH + bar.height * 2)
+                        .attr("y",  graphH + bar.height * 4.5)
                         .attr("text-anchor", "middle")
                         .attr("fill", color.change); // Display End date in orang
                     }
@@ -868,9 +868,9 @@
                         // add transition to x
                         gx.transition()
                         .duration(500)
-                        .attr("transform", `translate(0,${graphH + bar.height})`)
+                        .attr("transform", `translate(0,${graphH + bar.height*4})`)
                         .attr("fill", color.main)
-                        .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                        .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0)
                         .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                         .tickSizeOuter(0))
 
@@ -965,7 +965,7 @@
                         .duration(500)
                         .attr("transform", `translate(0,${graphH + bar.height})`)
                         .attr("fill", color.main)
-                        .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                        .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0)
                         .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                         .tickSizeOuter(0))
 
@@ -1024,7 +1024,7 @@
                         .duration(500)
                         .attr("transform", `translate(0,${graphH + bar.height})`)
                         .attr("fill", color.main)
-                        .call(d3.axisBottom(x).ticks(25).tickSizeOuter(0)
+                        .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0)
                         .tickFormat(d3.format(".0f")) // Add this line to change the tick format
                         .tickSizeOuter(0))
 

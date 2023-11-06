@@ -22,7 +22,7 @@
         
         // Basic Canvas Information 
         const margin = ({top: 30, bottom: 30, left: 30, right: 30});
-        const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
+        const bar = ({graphX:100, graphY: 0, graphW: 1600,graphH: 60, width: 20, height: 30})
         const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
         // Dummy Information to test locally
@@ -536,12 +536,15 @@
               dictatorship.
               
               <script>
+
                 var country = "Argentina"
 
                 function find_country(country, data){
                     let index = null
+
+
                     for(let i = 0; i< data.length; i++){
-                        if(data.country == country){
+                        if(data[i].Country == (country)){
                             return i
                         }
                     }
@@ -551,6 +554,12 @@
                 var index = find_country(country, data)
 
                 console.log(index)
+
+                const svg = d3.select("#events")
+                            .append('svg')
+                            .attr('viewbox', bar.graphW, bar.graphW )
+
+                events.append(svg.node())
               </script>
 
     </body>
