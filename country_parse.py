@@ -43,7 +43,7 @@ class country():
           event_desc = []
           for event in listed[a:b]:
                  year_event = event.split('-')
-                 event_date.append(year_event[0])
+                 event_date.append(int(year_event[0]))
                  event_desc.append(event)
                  self.timeline.update({"Dates":event_date})
                  self.timeline.update({"Events":event_desc})
@@ -51,13 +51,20 @@ class country():
 
      def set_meminit(self, listed, b):
           c = listed.index('Sites of memory')
-          for i in listed[b:c]:
-               self.set_memdates(i)
+          events = []
+          dates = []
+          for strg in listed[b:c]:
+               topic_summ = strg.split('-', 1)
+               dates.append(int(topic_summ[0]))
+               events.append(topic_summ[1])
+          
+          self.meminit.update({'Dates':dates})
+          self.meminit.update({"Event": events})
+               
           return c
 
-     def set_memdates(self, strg):
-            topic_summ = strg.split(':')
-            self.meminit.update({topic_summ[0]: topic_summ[1]})
+            
+            
 
      def set_sites(self, listed, c):
           d = listed.index('Organisations')

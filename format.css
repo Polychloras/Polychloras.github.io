@@ -29,6 +29,7 @@ ul{
 
 li{
     float: left;
+    padding-left: 10px;
 }
 li a {
     display:block;
@@ -43,11 +44,13 @@ li a:hover{
 
 }
 
-nav {
-    padding-bottom: 30px
-}
 
 div select{
     display:block;
-    padding-left: 40px;
+    position: right;
+}
+
+label {
+   
+    font-weight: bold;
 }
