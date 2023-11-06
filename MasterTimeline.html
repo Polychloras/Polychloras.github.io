@@ -28,7 +28,7 @@
             const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
             // Dummy Information to test locally
-            var data = [
+            var datas = [
             {
             "Country": "Argentina",
             "Topics": [
@@ -434,7 +434,7 @@
             "Movimiento de V\u00edctimas de Cr\u00edmenes de Estado (MOVICE)": " an umbrella organisation for victims of human right violations perpetrated by state forces or paramilitary groups.","Comisi\u00f3n Nacional de Reparaci\u00f3n y Restauraci\u00f3n (CNRR)": " a body established by the Ley 975. It comprises the Grupo de Memoria Hist\u00f3rica (GMH), an investigative unit that has published reports on the armed conflict.","Comisi\u00f3n para el Esclarecimiento de la Verdad, la Convivencia y la No Repetici\u00f3n (CEV)": " a body created after the 2016 agreement, to investigate the armed conflict and provide a path to reconciliation.","Consejer\u00eda Presidencial para los Derechos Humanos y el Derecho Internacional Humanitario": " the state body currently in charge of coordinating state actions in line with the promotion of human rights"}}]
               
         
-             var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
+             var featureAs =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
              {"feature": "Topics","items": ["dictatorship","military dictatorships","military dictatorship","pinochet dictatorship","internal armed conflict","state violence", " human rights violations","political instability","civil war","stroessner dictatorship","social crises","bolivarian revolution"]}, {
              "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
@@ -453,8 +453,8 @@
     <div id = "dates"></div>      
 
         <script type="module">
-                //const data = await d3.json("12Data.json")
-                //const featureA = await d3.json("12Collective.json") 
+                const data = await d3.json("12Data.json")
+                const featureA = await d3.json("12Collective.json") 
 
                 // Function that grabs the items based on type
                 function get_element(value, element){
