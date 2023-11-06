@@ -437,7 +437,6 @@
          "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
         ]
 
-        var data = await d3.json("12Data.json")
 
 
     </script>
@@ -521,13 +520,14 @@
               <script>
 
                 var country = "Argentina"
+                const data = await d3.json("12Data.json")
 
-                function find_country(country, data){
+                function find_country(country, data_c){
                     let index = null
 
 
-                    for(let i = 0; i< data.length; i++){
-                        if(data[i].Country == (country)){
+                    for(let i = 0; i< data_c.length; i++){
+                        if(data_c[i].Country == (country)){
                             return i
                         }
                     }
@@ -535,7 +535,7 @@
                 }
 
 
-                var index = find_country(country, data)
+                var index = find_country(country, data_c)
 
                 const svg = d3.select("#events").append('svg')
                 .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*5]) 
