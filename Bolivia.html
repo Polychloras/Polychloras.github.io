@@ -39,9 +39,9 @@
     <script>
         const data = [
             {
-                country: 'USA',
+                country: 'Bolivia',
                 events: [
-                    { date: '2023-01-01', description: 'Event 1 in USA' },
+                    { date: '1964', description: 'A military junta led by general René Barrientos overthrew Víctor Paz Estenssoro and took control of the government.' },
                     { date: '2023-03-15', description: 'Event 2 in USA' },
                     // Add more events for USA
                 ]
@@ -54,7 +54,7 @@
         const height = timelineBar.node().getBoundingClientRect().height;
 
         const xScale = d3.scaleTime()
-            .domain([new Date('2023-01-01'), new Date('2023-12-31')])
+            .domain([new Date('1950'), new Date('2025')])
             .range([0, width]);
 
         const svg = timelineBar.append('svg')
