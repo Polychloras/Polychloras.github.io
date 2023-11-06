@@ -1,4 +1,3 @@
-
 h1{
     display:block;
     color:linen;
@@ -29,7 +28,6 @@ ul{
 
 li{
     float: left;
-    padding-left: 10px;
 }
 li a {
     display:block;
@@ -39,18 +37,8 @@ li a {
     text-decoration: none;
 }
 
+
 li a:hover{
     background-color:gold;
 
-}
-
-
-div select{
-    display:block;
-    position: right;
-}
-
-label {
-   
-    font-weight: bold;
 }
