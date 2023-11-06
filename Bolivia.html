@@ -68,7 +68,10 @@
             .attr('class', 'events-group');
 
         eventsGroup.selectAll('.event')
-            .data(d => d.events)
+        const yearLabels = d3.range(1950, 2026, 1); // Labels every 1 years
+        svg.selectAll('.year-label')
+            .data(yearLabels)
+           
             .enter()
             .append('rect')
             .attr('class', 'event')
