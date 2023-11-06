@@ -698,7 +698,7 @@
                 // display country title
                 var txt = bars.append("text")
                         .attr("fill", color.font)
-                        .attr("x", d => x(d.Start_Date) + 10)
+                        .attr("x", d => x(d.Start_Date))
                         .attr("y", (d, i) => y(d.Country)+5)
                         .attr("font-size", 16) 
                         .text(d=> d.Country)     
@@ -996,7 +996,7 @@
                             .duration(500)
                                 .attr("fill", color.font)
                                 .attr("x", d =>(d.Start_Date > selectedmin)? x(d.Start_Date) + 10 : x(selectedmin) + 10)
-                                .attr("y", (d, i) => (y(d.Country) + 10 ))
+                                .attr("y", (d, i) => (y(d.Country)))
                                 .attr("font-size", 16) 
                                 .text(d=> d.Country) 
                     }
@@ -1074,7 +1074,7 @@
                             .duration(500)
                                 .attr("fill", color.font)
                                 .attr("x", d => x(d.Start_Date) + 10)
-                                .attr("y", (d, i) => (y(d.Country) + 10 ))
+                                .attr("y", (d, i) => (y(d.Country)))
                                 .attr("font-size", 16) 
                                 .text(d => d.Country) 
                                 .attr('opacity', 1)
