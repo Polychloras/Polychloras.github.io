@@ -42,7 +42,8 @@
                 country: 'Bolivia',
                 events: [
                     { date: '1964', description: 'A military junta led by general René Barrientos overthrew Víctor Paz Estenssoro and took control of the government.' },
-                    { date: '2023-03-15', description: 'Event 2 in USA' },
+                    { date: '1967', description: 'Masacre de San Juan. In June, during the celebration of the night of San Juan, military troops invaded the mining camps of Catavi, killing workers and their families.' },
+                    { date: '1969-1970', description: 'After the death of Barrientos, general Alfredo Ovando took over the government, followed by general Juan José Torres.' },
                     // Add more events for USA
                 ]
             },
@@ -54,14 +55,14 @@
         const height = timelineBar.node().getBoundingClientRect().height;
 
         const xScale = d3.scaleTime()
-            .domain([new Date('1950'), new Date('2025')])
+            .domain([new Date('1950'), new Date('2030')])
             .range([0, width]);
 
         const svg = timelineBar.append('svg')
             .attr('width', width)
             .attr('height', height);
 
-        const yearLabels = d3.range(1950, 2026, 5); // Labels for every 5 years
+        const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
         svg.selectAll('.year-label')
             .data(yearLabels)
             .enter()
