@@ -25,20 +25,417 @@
             // Basic Canvas Information 
             const margin = ({top: 30, bottom: 30, left: 30, right: 30});
             const bar = ({graphX:100, graphY: 0, graphW: 1600, width: 20, height: 30})
-            const color = ({main: "teal", change: "green", font:"white", back:"lightgrey"})
+            const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
             // Dummy Information to test locally
-            var data = [{"Country": "Argentina","Topics": ["dictatorship "],"Start_Date": 1976,"End_Date": 1983, "Categories": ["Dictatorship", "coup","Operation Condor","international armed conflict","truth commission","state museum","memorial sites"],},
-            {"Country": "Bolivia","Topics": ["military dictatorships ", "state violence"], "Start_Date": 1964, "End_Date": 1982,  "Categories": ["Dictatorship","coup","Operation Condor","reparation law","truth commission","indigenous peoples"]},
-            {"Country": "Brazil","Topics": [ "military dictatorship "],"Start_Date": 1964,"End_Date": 1985, "Categories":[]},
-            {"Country": "Chile","Topics": ["pinochet dictatorship ", "state violence"], "Start_Date": 1973,"End_Date": 1990, "Categories":[] },
-            {"Country": "Colombia", "Topics": [ "internal armed conflict ", "state violence"],"Start_Date": 1960,"End_Date": 2016, "Categories":[]},
-            {"Country": "Ecuador","Topics": [" human rights violations "," political instability "],"Start_Date": 1983,"End_Date": 2008, "Categories":[]}
-             ]
-
+            var data = [
+            {
+            "Country": "Argentina",
+            "Topics": [
+            "dictatorship"
+            ],
+            "Start_Date": 1976,
+            "End_Date": 1983,
+            "Categories": [
+            "dictatorship",
+            "coup",
+            "operation condor",
+            "international armed conflict",
+            "truth commission",
+            "state museum",
+            "memorial sites"
+            ],
+            "Actors": [
+            "argentine armed forces",
+            "a diverse spectrum of groups and parties associated with peronism",
+            "social organizations",
+            "guerrilla movements active since the previous decade"
+            ],
+            "Summary": "",
+            "Issues specific to the country": [],
+            "Events": {
+            "Dates": [
+            1973,
+            1976,
+            1977,
+            1979,
+            1982,
+            1982,
+            1983,
+            1985
+            ],
+            "Events": [
+            "1973-1976 - A period of three Peronist administrations during which the country experienced a climate of violence and generalised instability, as part of the struggle for power between the different factions of this movement. The end of this period was marked by a series of politically motivated deaths.",
+            "1976 - Coup d\u2019\u00e9tat. On 24 March, the Argentine armed forces, led by Jorge Rafael Videla, overthrew Mar\u00eda Estela Mart\u00ednez de Per\u00f3n and installed a military junta in the government, ushering in a new period of dictatorship in the country. The state apparatus was militarised, and systematic political persecution of the population began.  The number of arrests, murders, cases of torture and abductions of children during this period are considered evidence of state terrorism. The exact number of victims is still disputed, but estimates put the number of disappeared prisoners at around 30,000.",
+            "1977 - Groups of mothers of disappeared prisoners began to meet regularly in the Plaza de Mayo in front of the Ministry of the Interior.",
+            "1979 - A mission from the Inter-American Commission on Human Rights visited the country. It investigated cases of forcibly disappeared prisoners and collected numerous testimonies from relatives of the victims.",
+            "1982 - Guerra de las Malvinas/Falklands War. The military junta launched a war over the Malvinas Islands, which caused many casualties and ended in June with a defeat at the hands of the United Kingdom.",
+            "1982 - A year during which numerous demonstrations against the dictatorship occurred, with mass marches such as the Marcha pan, paz y trabajo (in April) and the Marcha por la vida (in October).",
+            "1983 - In December, after elections, Ra\u00fal Alfons\u00edn is sworn in as president.",
+            "1985 - Juicio a las Juntas. The high commanders of the military juntas that ran the government during the dictatorship are tried and sentenced for crimes committed during the period."
+            ]
+            },
+            "Memory Inititives": {
+            "Dates": [
+            1986,
+            2002,
+            2003,
+            2011
+            ],
+            "Event": [
+            " Nunca M\u00e1s (1984, with reprints): a report published as a result of the work of CONADEP, which established the number of forcibly disappeared prisoners at around 9,000, a figure that would increase over the years.",
+            " Ley 25.633 (2002), Ley 26.085 (2006): two laws establishing March 24 as \u201cD\u00eda Nacional de la Memoria por la Verdad y la Justicia\u201d, a public holiday in memory of the victims of the dictatorship.",
+            " Ley 25.779 (2003): a law that nullifies two other instruments, (the laws 23.492 \u201cde Punto Final\u201d, from 1986; and 23.532, \u201cde Obediencia Debida\u201d, form 1897) which limited legal action against members of the armed forces for crimes against humanity committed during the dictatorship.",
+            " Ley 26.691 de Preservaci\u00f3n, Se\u00f1alizaci\u00f3n y Difusi\u00f3n de Sitios de Memoria del terrorismo de Estado (2011): a law that designates detention, torture and extermination centres as sites of remembrance, to be publicly known and openly discussed."
+            ]
+            },
+            "Sites of Memory": {
+            "Espacio para la Memoria y para la Promoci\u00f3n y Defensa de los Derechos Humanos": " a public space located in a former detention centre (the Escuela de Mec\u00e1nica de la Armada). It houses several public institutions, human rights bodies and organisations, including the Archivo de la Memoria and the Museo Sitio ESMA.",
+            "Archivo Provincial por la Memoria - C\u00f3rdoba": " a memorial located in what was once a clandestine detention centre in this province. It houses archives documenting the activities of state and social organisations during the dictatorship.",
+            "Parque de la memoria": " a public commemorative space, located to the north of Buenos Aires. The park houses the Monumento a las v\u00edctimas de terrorismo de Estado, with plaques bearing the names of some 9,000 victims. It also has a documentation centre and a digital archive."
+            },
+            "Organizations": {
+            "Servicio Paz y Justicia Argentina (SERPAJ)": " an organisation that has been active since 1974. During the dictatorship, it provided sustained support for the cases of disappeared prisoners.",
+            "Asamblea Permanente por los Derechos Humanos": " a group formed in 1975, with members from different sectors, who worked together to receive and denounce cases of victims of state terrorism.",
+            "Madres de la Plaza de Mayo": " an organisation created in 1977 as a result of demands made by a group of women to the government regarding the situation of their disappeared children. It is still active today, although it is currently divided into two main branches.",
+            "Comisi\u00f3n Nacional sobre la Desaparici\u00f3n de Personas (CONADEP)": " an official body created in 1983, at the beginning of Ra\u00fal Alfons\u00edn's government, to receive and investigate reports of disappeared prisoners and children abducted during the dictatorship."
+            }
+            },
+            {
+            "Country": "Bolivia",
+            "Topics": [
+            "military dictatorships"
+            ],
+            "Start_Date": 1964,
+            "End_Date": 1982,
+            "Categories": [
+            "dictatorship",
+            "coup",
+            "operation condor",
+            "reparation law",
+            "truth commission",
+            "indigenous peoples"
+            ],
+            "Actors": [
+            "bolivian armed forces, headed by different generals",
+            "political parties",
+            "workers' political organisations",
+            "peasants' organisations",
+            "bolivian indigenous peoples, civil organisations"
+            ],
+            "Summary": "The priest Federico Aguil\u00f3 counted in 1993 (in his book Nunca m\u00e1s para Bolivia) a number of 3059 detainees, 1259 people taken into custody, 429 killed in confrontations and massacres, 125 tortured, and 39 political assassinations.",
+            "Issues specific to the country": [
+            "Bolivia was one of the first Latin American countries to set up a commission to investigate cases of violence, but it was never able to complete its work. It would take more than three decades for the next commission to carry out similar work."
+            ],
+            "Events": {
+            "Dates": [
+            1964,
+            1967,
+            1969,
+            1971,
+            1974,
+            1975,
+            1978,
+            1979,
+            1980,
+            1980,
+            1982
+            ],
+            "Events": [
+            "1964 - A military junta led by general Ren\u00e9 Barrientos overthrew V\u00edctor Paz Estenssoro and took control of the government.",
+            "1967 - Masacre de San Juan. In June, during the celebration of the night of San Juan, military troops invaded the mining camps of Catavi, killing workers and their families.",
+            "1969-1970 - After the death of Barrientos, general Alfredo Ovando took over the government, followed by general Juan Jos\u00e9 Torres.",
+            "1971 - In a coup d'\u00e9tat, Colonel Hugo Banzer installed himself in the government and overthrew Torres. On 21 August, the day of the coup, violent clashes erupted in the country, and many people were killed in the repression. The Banzer dictatorship linked its repressive activities to those of the Condor Plan in Latin America.",
+            "1974 - Masacre del Valle. The government sends in the army to repress peasant protests in Cochabamba. Groups of peasants are murdered in different places in the region.",
+            "1975 - Moema Viezzer published Si me permiten hablar, a testimony by Domitila Barrios de Chungara, a miner, political leader, and survivor of the San Juan massacre.",
+            "1978 - After Banzer's departure, a series of calls for elections and military coups occurred in the following years.",
+            "1979 - Masacre de Todos Santos. At the beginning of November, Colonel Alberto Natusch leads a coup d'\u00e9tat. Numerous protests follow, which are violently suppressed by the army.",
+            "1980 - The priest Luis Espinal, who had actively denounced the repression and corruption of the government forces, is tortured and murdered by them.",
+            "1980 - In July, General Luis Garc\u00eda Meza and Colonel Luis Arce stage a coup d'\u00e9tat. Violent repression is unleashed against the population. Political leaders Marcelo Quiroga and Carlos Flores were murdered, and their bodies disappeared. Quiroga had promoted a trial to bring Banzer to justice.",
+            "1982 - The military junta stepped down. Congress appointed Hern\u00e1n Siles Suazo, the candidate elected in 1980, as president."
+            ]
+            },
+            "Memory Inititives": {
+            "Dates": [
+            1982,
+            2004,
+            2021
+            ],
+            "Event": [
+            " Decretos Supremos 19.241 (1982) y 19.734 (1983): Acts establishing the creation and continuity of the Comisi\u00f3n de Investigaci\u00f3n de Ciudadanos Desaparecidos Forzados.",
+            " Ley 2.640 de resarcimiento excepcional a v\u00edctimas de violencia pol\u00edtica en periodos de gobiernos Inconstitucionales (2004): a law establishing a reparation mechanism for victims of political violence between 1964 and 1982. To date, 1,714 cases have been recognised as beneficiaries and around 4,500 more are under consideration.",
+            " Informe de la Comisi\u00f3n de la Verdad (2021): a report comprising 11 volumes of documentation as a result of the investigations carried out by the commission."
+            ]
+            },
+            "Sites of Memory": {
+            "Espacio de la Memoria Hist\u00f3rica de las Luchas del Pueblo Boliviano": " a place of remembrance where public events are held, located on Laikakota Hill in La Paz. There is also a statue of Marcelo Quiroga in the same place."
+            },
+            "Organizations": {
+            "Asamblea permanente de Derechos Humanos de Bolivia": " an organisation ffounded in 1976 to defend and promote human rights.",
+            "Asociaci\u00f3n de familiares de detenidos desaparecidos y m\u00e1rtires por la liberaci\u00f3n nacional (ASOFAMD)": " an organisation formed by relatives of victims of human rights violations during the dictatorships.",
+            "Comisi\u00f3n Nacional de Investigaci\u00f3n de Desaparecidos Forzados de Bolivia": " an official body set up in 1982 to investigate human rights abuses, which was disbanded before it could complete its work.",
+            "Comisi\u00f3n de la Verdad": " official body created in 2017 to investigate human rights violations during the dictatorships.",
+            "Plataforma de luchadores sociales y sobrevivientes de las dictaduras": " an umbrella organisation that set up a tent in front of the Ministry of Justice in 2012 to demand reparations for victims. Its leader, Julio Llanos, died in 2019 after being attacked."
+            }
+            },
+            {
+            "Country": "Brazil",
+            "Topics": [
+            "military dictatorship"
+            ],
+            "Start_Date": 1964,
+            "End_Date": 1985,
+            "Categories": [
+            "dictatorship",
+            "coup",
+            "operation condor",
+            "amnesty law",
+            "reparations law",
+            "truth commission",
+            "memorial sites"
+            ],
+            "Actors": [
+            "brazilian state",
+            "brazilian armed forces",
+            "various political parties, reduced to two legal parties for many years of the dictatorship",
+            "several civil organisations"
+            ],
+            "Summary": "The report of the Comiss\u00e3o Nacional da Verdade analysed 434 cases of people that were killed or forcibly disappeared, counting only cases that could be verified. The reports of the Secretaria de Direitos Humanos speak of around 20,000 cases of people tortured during this period.",
+            "Issues specific to the country": [],
+            "Events": {
+            "Dates": [
+            1964,
+            1968,
+            1972,
+            1974,
+            1975,
+            1976,
+            1977,
+            1979,
+            1985,
+            1985
+            ],
+            "Events": [
+            "1964 - On March 31, during the presidency of Joao Goulart, the armed forces rebel against the government. After the coup d\u2019\u00e9tat, General Humberto Castelo Branco is designated as head of government, and Goulart goes into exile in Uruguay. The military dictatorship deployed a series of measures aiming to thwart political opposition to the regime, which turned into a violent repressive campaign. This repression was also coordinated with other governments of the broader South American region through the Operation Condor.",
+            "1968 - Passeata dos Cem Mil. A mass protest against the dictatorship took place in Rio de Janeiro, with the participation of different sector of Brazilian civil society.",
+            "1972 - The organisation Amnesty International publishes a report containing the names of victims of torture in Brazil. It also identifies some of the state officials responsible.",
+            "1974 - On February 23, student Fernando de Santa Cruz was detained by agents of the state in Rio de Janeiro, then killed and forcibly disappeared.",
+            "1975 - On October 26, journalist Vladimir Herzog was tortured and killed after visiting a police station. His murder provoked shock and reactions throughout Brazilian society.",
+            "1976 - Between January 16 and 17, the metal worker Manoel Fiel Filho is tortured and killed by agents of the dictatorship.",
+            "1977 - In a courtyard of the Universidad de S\u00e3o Paulo, the lawyer Goffredo Telles Jr. read out the \u201cCarta aos brasileiros\u201d, a text condemning the dictatorship.",
+            "1979 - Lei da Anistia. The dictatorship government decreed an amnesty law. It was a long-standing demand of Brazilian civil society, intended to benefit citizens that were politically persecuted, though it was approved in the terms defined by the government.",
+            "1985 - The book Brasil: nunca mais was published. It is a report that documents, from judicial sources, cases of human rights violations during the dictatorship.",
+            "1985 - Tancredo Neves became president through an electoral college, defeating the candidate of the dictatorship\u2019s government. Neves died the same year and Jos\u00e9 Sarney became president."
+            ]
+            },
+            "Memory Inititives": {
+            "Dates": [
+            1995,
+            2002,
+            2007,
+            2009,
+            2014
+            ],
+            "Event": [
+            " Lei N\u00b09.140 \u201cLei dos Desaparecidos\u201d (1995): a legal instrument that establishes the state\u2019s responsibility in the death of people forcibly disappeared because of their political activities between 1961 and 1988. Also creates the Comiss\u00e3o Especial sobre Mortos e Desaparecidos Pol\u00edticos.",
+            " Lei N\u00b010.559 (2002): a legal instrument that creates the Comiss\u00e3o de Anistia and establishes reparation measures for people that were granted political amnesty.",
+            " Direito \u00e0 Mem\u00f3ria e \u00e0 Verdade (2007): a report produced as a result of the work of the work of the CEMPD, published by the Secretaria Especial dos Dereitos Humanos.",
+            " D\u00f4ssie Ditadura: Mortos e Desaparecidos Pol\u00edticos no Brasil (1964-1985) (2009): the latest report of the investigations on victims of human rights violations carried out by the Comiss\u00e3o de Familiares de Mortos e Desaparecidos Pol\u00edticos. Different versions of the document have been published since 1979.",
+            " Relat\u00f3rio da Comiss\u00e3o Nacional da Verdade (2014): a document, published in three volumes, detailing the work of this commission.  http://cnv.memoriasreveladas.gov.br"
+            ]
+            },
+            "Sites of Memory": {
+            "Memorial Pessoas Imprescind\u00edveis": " a series of commemorative sites, located in different cities, dedicated to victims of human rights violations during the dictatorship.",
+            "Memorial da Anistia": " an unfinished project for a commemorative space that was going to be constructed in the city of Belo Horizonte.",
+            "Caminhos da ditadura em Porto Alegre (2016)": " a map, available online, of sites of state repression and civil resistante to the dictatorship in this city, created by historian Anita Natividade Carneiro.",
+            "https": "//www.ufrgs.br/caminhosdaditaduraemportoalegre/"
+            },
+            "Organizations": {
+            "Comiss\u00e3o de Justi\u00e7a e Paz (CJE)": " an organisation created in 1972 with the aid of catholic Archbishop Paulo Evaristo Arns, which provided support to victims of human rights violations.",
+            "Movimento Feminino Pela Anistia (MFPA)": " a political movement founded in 1975 by Theresinha Zerbini. It installed a demand for amnesty for citizens politically persecuted by the dictatorship.",
+            "Comiss\u00e3o Especial sobre Mortos e Desaparecidos Pol\u00edticos (CEMPD)": " an investigative body created in 1995 with the aim of searching for people killed and forcibly disappeared during the dictatorship period, as well as resolving on reparatory demands for the victims\u2019 families. The commission was recently closed in December 2022, without completing its task.",
+            "Comiss\u00e3o Nacional da Verdade (CNV)": " an official body created in 2011 with the purpose of investigating human rights violations that occurred between September 18, 1946, and October 5, 1985."
+            }
+            },
+            {
+            "Country": "Chile",
+            "Topics": [
+            "pinochet dictatorship"
+            ],
+            "Start_Date": 1973,
+            "End_Date": 1990,
+            "Categories": [
+            "dictatorship",
+            "coup",
+            "operation condor",
+            "reparation law",
+            "truth commission",
+            "state museum",
+            "memorial sites"
+            ],
+            "Actors": [
+            "chilean state",
+            "chilean armed forces",
+            "guerrilla groups",
+            "a wide spectrum of chilean political parties",
+            "various civil organisations"
+            ],
+            "Summary": "Based on the work of a series of commissions and related instruments, the Chilean Government currently recognises 40,175 cases of victims of human right violations during the dictatorship period; this total comprises cases of executions, torture, enforced disappearance and imprisonment.",
+            "Issues specific to the country": [
+            "Another commission active during the post-dictatorship period was the Comisi\u00f3n de verdad y nuevo trato. Active between 2001 and 2033, its aim was to examine the historical relationship between the Chilean state and indigenous peoples, as well as to provide recommendations on ongoing issues that affect the latter, such as land access and their socio-economic situation."
+            ],
+            "Events": {
+            "Dates": [
+            1973,
+            1976,
+            1978,
+            1983,
+            1985,
+            1989,
+            1990
+            ],
+            "Events": [
+            "1973 - On 11 September, the armed forces stage a coup and depose Salvador Allende. A \"Junta Militar\" led by General Augusto Pinochet took control of the government. The dictatorship began a violent political persecution of the population. As part of the \"Caravana de la muerte\", the army deployed its forces throughout the country, killing and forcibly disappearing those perceived as political opponents.",
+            "1976 - Catholic Archbishop Ra\u00fal Silva Henr\u00edquez founded the Vicar\u00eda de la solidaridad. The organisation would provide a wide range of assistance to victims of human rights violations until 1992.",
+            "1978 - Hornos de Lonqu\u00e9n case. The remains of 15 campesinos imprisoned during the early years of the dictatorship are found in the lime kilns of an abandoned mine. This site was one of the first to be transformed into a place of remembrance after the dictatorship.",
+            "1983 - A mass protest against the dictatorship is held in Santiago in May. Mass protests continue in the following years.",
+            "1985 - The discovery of the decapitated bodies of three members of the Communist Party (Jos\u00e9 Manuel Parada, Manuel Guerrero and Santiago Nattino) causes a nationwide shock.",
+            "1989 - In the context of mass mobilisations against the dictatorship, a referendum is held on the continuation of the Pinochet government. The \"Campa\u00f1a por el No\" (a campaign against continuity of the dictatorship government) wins, paving the way for elections.",
+            "1990 - In May, Patricio Aylwin becomes the first elected president since the dictatorship."
+            ]
+            },
+            "Memory Inititives": {
+            "Dates": [
+            1991,
+            1992,
+            1992,
+            2005,
+            2009
+            ],
+            "Event": [
+            " Informe de la Comisi\u00f3n de Verdad y Reconciliaci\u00f3n (1991): also known as Informe Rettig, it is a document published in three volumes detailing the result of the work of the commission. http://bibliotecadigital.indh.cl/handle/123456789/170",
+            " Programa de Reparaci\u00f3n y Atenci\u00f3n Integral en Salud y Derechos Humanos (PRAIS) (1992): a programme of reparative measures and health assistance for victims and their relatives, operated through the Ministry of Health.",
+            " Ley 19.123 (1992, with subsequent modifications): the law that creates the Corporaci\u00f3n Nacional de Reparaci\u00f3n y Reconciliaci\u00f3n. It defines investigative and reparative measures for cases of victims of human rights violations, as per the recommendations found in the \u201cInforme Rettig\u201d. Some measures were continued through the Programa de Derechos Humanos (1997).",
+            " Informe de la Comis\u00f3n Nacional sobre Prisi\u00f3n Pol\u00edtica y tortura (2005): a report of the investigation carried out by this commission. It is also known as Informe Valech I, as it was later expanded by the work (Informe Valech II) of the Comisi\u00f3n asesora para la calificaci\u00f3n (see \u2018Organisations\u2019 below).   http://bibliotecadigital.indh.cl/handle/123456789/455 http://bibliotecadigital.indh.cl/handle/123456789/600",
+            " Ley 20.405 (2009): Creates the Instituto Nacional de Derechos Humanos, which takes up some of the roles defined in the instruments mentioned above."
+            ]
+            },
+            "Sites of Memory": {
+            "Parque por la Paz Villa Grimaldi": " a property that became one of the main centres of detention and torture during the dictatorship. Repurposed as a commemorative space, it has been open to the public as a park since 1997.",
+            "Pisagua memorial and historical monuments": " an ensemble of buildings in a small port city in the north of the country that were used as a concentration camp during the dictatorship. Mass graves of executed prisoners were found in the site.",
+            "Museo de la memoria y los derechos humanos": " an institution inaugurated in 2010, with educational and commemorative purposes pertaining to the dictatorship period and human rights issues. Hosts an archive and documentation centre."
+            },
+            "Organizations": {
+            "Agrupaci\u00f3n de Familiares de Detenidos Desaparecidos (AFDD), Agrupaci\u00f3n de Familiares de Ejecutados Pol\u00edticos (AFEP)": " two organisations created, respectively, in 1975 and 1976, by relatives of victims of human rights violations by state agents during the dictatorship.",
+            "Comisi\u00f3n Chilena de Derechos Humanos": " a non-guvernamental organisation created in 1978 to safeguard human rights in the country. It keeps an archive including different types of documents.",
+            "Comisi\u00f3n Nacional de Verdad y Reconciliaci\u00f3n (Comisi\u00f3n Rettig)": " an investigative body created in 1990 to examine cases of human rights violations on the hands of state agents or as a result of politically motivated violence during the dictatorship.",
+            "Comisi\u00f3n Nacional de Prisi\u00f3n Pol\u00edtica y Tortura (Comisi\u00f3n Valech)": " an investigative body created in 2003, the purpose of which was to expand the inquiry into cases of human rights violations.",
+            "Comisi\u00f3n asesora para la calificaci\u00f3n de detenidos desaparecidos, ejecutados pol\u00edticos y v\u00edctimas de prisi\u00f3n pol\u00edtica y tortura entre el 11 de septiembre de 1973 y el 10 de marzo de 1990": " an investigative body established in 2010 to identify additional cases of human rights violations during the dictatorship."
+            }
+            },
+            {
+            "Country": "Colombia",
+            "Topics": [
+            "internal armed conflict"
+            ],
+            "Start_Date": 1960,
+            "End_Date": 2023,
+            "Categories": [
+            "internal armed conflict",
+            "indigenous peoples",
+            "truth commission",
+            "reparations law",
+            "memorial sites"
+            ],
+            "Actors": [
+            "colombian state",
+            "colombian armed forces",
+            "guerrilla groups",
+            "paramilitary groups",
+            "drug dealers\u2019 organisations",
+            "colombian political parties",
+            "campesinos",
+            "indigenous peoples",
+            "various civil organisations"
+            ],
+            "Summary": "The Comisi\u00f3n de la Verdad established that 450.664 people were killed between 1985 and 2018, by action of paramilitary groups, guerrillas, and state agents. Around 121.768 people were forcibly disappeared, 50.770 were kidnapped and 752.964 were displaced by the conflict. The estimated number of victims is much higher.",
+            "Issues specific to the country": [],
+            "Events": {
+            "Dates": [
+            1958,
+            1964,
+            1965,
+            1967,
+            1974,
+            1977,
+            1978,
+            1979,
+            1984,
+            1986,
+            1989,
+            1990,
+            1991,
+            1993,
+            1997,
+            1997,
+            1999,
+            2003,
+            2003,
+            2008,
+            2012,
+            2016
+            ],
+            "Events": [
+            "1958 - The conservative and liberal parties of Colombia establish the Frente Nacional. This agreement involved alternance in power, but solely between these two parties. It lasted until 1974.",
+            "1964 - The guerrilla organisations Ej\u00e9rcito de Liberaci\u00f3n Nacional (ELN) and the Fuerzas Armadas Revolucionarias de Colombia (FARC) were formed.",
+            "1965 - The government issued Decree 3398 (turned Law 48 in 1968) that allowed the formation of armed forces among the civilian population. It will be declared unconstitutional in 1989.",
+            "1967 - The guerrilla organisation Ej\u00e9rcito Popular de Liberaci\u00f3n (EPL) was founded.",
+            "1974 - The guerrilla organisation Movimiento 19 de Abril (M-19) was formed.",
+            "1977 - Paro c\u00edvico nacional. On 14 September, a national strike against the government broke out. Following several years of demonstrations, this one was the largest that the country had ever seen.",
+            "1978 - The government issued Decreto 1923, establishing the Estatuto de Seguridad. It increased the punitive attributions of state organisms, which led to human rights violations.",
+            "1979 - On 30 March, the first Foro Nacional de Derechos Humanos takes place. As a result, the Comit\u00e9 Permanente por la Defensa de los Derechos Humanos (CPDH) was created.",
+            "1984 - Indigenous peoples from the Cauca department establish the guerrilla organisation Movimiento Armado Quint\u00edn Lame (MAQL).",
+            "1986 - Masacre de Trujillo. This year marks the beginning of a series of killings perpetrated by the armed forces and drug dealer groups against the population of the Cauca Valley, up until 1994.",
+            "1989 - As part of a war against the state, drug dealer groups led by Pablo Escobar, carried out a series of murders. Presidential candidate Luis Carlos Gal\u00e1n was one of the victims. Mass protest erupt in Colombia in response to this violence.",
+            "1990 - During Virgilio Barco\u2019s term, a peace agreement was signed between the government and the M-19 guerrilla. The next year, part of the EPL was also demobilised.",
+            "1991 - On 4 July, during C\u00e9sar Gaviria's presidency, a new Constitution was proclaimed.",
+            "1993 - Government forces collaborating with drug dealers, organised as the group known as \u201cLos Pepes\u201d, kill Pablo Escobar. According to the CEV, around 70% of human rights violations of the armed conflict occurred between 1997 and 2006, marking a critical point of its development.",
+            "1997 - A series of preexisting paramilitary groups were merged to form the Autodefensas Unidas de Colombia (AUC). In the next years this group will violently spread its presence throughout the country.",
+            "1997 - Mandato Ciudadano por la Paz, la Vida y la Libertad. While the violence of the armed conflict was rising, an initiative led by Colombian citizens demanded a non-violent resolution to the conflict.",
+            "1999 - \u201cPlan Colombia\u201d. An agreement between the governments of Colombia and the US to combat drug trafficking leads to increased financial support and military presence by the latter.",
+            "2003 - During \u00c1lvaro Uribe\u2019s presidency, the government increased its military operations against the FARC, as part of the \u201cPlan Patriota\u201d. The increased violence had dire effects on the human rights of the civil population.",
+            "2003 - Following negotiations with the government, the AUC started a demobilisation process, although violent actions by paramilitary groups continued.",
+            "2008 - Case \u201cFalsos Positivos\u201d. A public scandal broke out after the revelation that, from around 2002 onwards, thousands of civilians were killed by the army and presented as enemy combatants.",
+            "2012 - Peace talks between the government and the FARC began in the city of La Habana, Cuba.",
+            "2016 - Acuerdo Final para la Terminaci\u00f3n del Conflicto y la Construcci\u00f3n de una Paz Estable y Duradera. On 26 September, the Colombian government and the FARC signed a peace agreement. Following a referendum, a revised agreement was signed on 24 November."
+            ]
+            },
+            "Memory Inititives": {
+            "Dates": [
+            2005,
+            2011,
+            2017,
+            2022
+            ],
+            "Event": [
+            " Ley 975, \u201cde Justicia y Paz\u201d (2005): a legal framework aimed to facilitate the demobilisation and reincorporation to civilian life of members of illegal armed groups.",
+            " Ley 1.448, also known as \u201cLey de V\u00edctimas y Restituci\u00f3n de Tierras\u201d (2011): a law that establishes a series of judicial, administrative, and reparation measures for victims of human rights violations during the armed conflict. It is linked to specific decrees (N\u00b04633, 4634, 4635) that pertain ethnic groups. This law also created the Sistema Nacional de Atenci\u00f3n y Reparaci\u00f3n Integral a las V\u00edctimas (SNARIV), a network that coordinates reparation and support measures for victims of the armed conflict throughout the country. Additionally, the Programa de Atenci\u00f3n Psicosocial y Salud Integral a V\u00edctimas (PAPSIVI) provides healthcare and community support.",
+            " Sistema Integral de Verdad, Justicia, Reparaci\u00f3n y No Repetici\u00f3n (SIVJRNR) (2017): a series of mechanisms for reparation, investigation and justice that stem from the Acuerdo de Paz. In addition to the work of the Truth Commission, the SIVJRNR includes the Jurisdicci\u00f3n Especial para la Paz (JEP), which investigates cases of human rights violations, and the Unidad de B\u00fasqueda de Personas dadas por Desaparecidas (UBPD), which deals with cases of disappeared persons.",
+            " Informe \u201cHay Futuro si hay Verdad\u201d (2022): the final report with the results of the work of the CEV, published in 11 volumes (comprising 24 parts). https://www.comisiondelaverdad.co/hay-futuro-si-hay-verdad"
+            ]
+            },
+            "Sites of Memory": {
+            "2011 - Centro de Memoria Hist\u00f3rica": " a government institution created in 2011 (under Law 1.448), with the task of preserving the memory of the armed conflict. It hosts the Archivo de los Derechos Humanos and a Museo de la Memoria Hist\u00f3rica, the latter still unfinished.",
+            "2012 - Centro de Memoria, Paz y Reconciliaci\u00f3n": " a memorial site that was inaugurated in 2012 in Bogot\u00e1. It is located in the Parque de la Reconciliaci\u00f3n and regularly host public activities. It houses a documentation centre.",
+            "2012 - Museo Casa de la Memoria": " a commemorative institution that was inaugurated in 2012 in the city of Medell\u00edn, the result of the work of victims of the armed conflict and the mayor\u2019s office."
+            },
+            "Organizations": {
+            "Asociaci\u00f3n de Familiares de Detenidos y Desaparecidos (ASFADDES)": " a non-governmental organisation established in 1983 by relatives of victims of enforced disappearances.",
+            "Movimiento de V\u00edctimas de Cr\u00edmenes de Estado (MOVICE)": " an umbrella organisation for victims of human right violations perpetrated by state forces or paramilitary groups.","Comisi\u00f3n Nacional de Reparaci\u00f3n y Restauraci\u00f3n (CNRR)": " a body established by the Ley 975. It comprises the Grupo de Memoria Hist\u00f3rica (GMH), an investigative unit that has published reports on the armed conflict.","Comisi\u00f3n para el Esclarecimiento de la Verdad, la Convivencia y la No Repetici\u00f3n (CEV)": " a body created after the 2016 agreement, to investigate the armed conflict and provide a path to reconciliation.","Consejer\u00eda Presidencial para los Derechos Humanos y el Derecho Internacional Humanitario": " the state body currently in charge of coordinating state actions in line with the promotion of human rights"}}]
+              
         
              var featureA =[{"feature": "Country","items": ["Argentina","Bolivia","Brazil","Chile","Colombia","Ecuador","El Salvador","Panama","Paraguay","Peru","Uruguay","Venezuela"]},
-             {"feature": "Topics","items": ["dictatorship ","military dictatorships ","military dictatorship ","pinochet dictatorship ","internal armed conflict ","state violence", " human rights violations "," political instability ","civil war ","stroessner dictatorship ","social crises "," bolivarian revolution "]}, {
+             {"feature": "Topics","items": ["dictatorship","military dictatorships","military dictatorship","pinochet dictatorship","internal armed conflict","state violence", " human rights violations","political instability","civil war","stroessner dictatorship","social crises","bolivarian revolution"]}, {
              "feature": "Categories","items": ["Dictatorship","coup","Operation Condor", "international armed conflict","truth commission","state museum","memorial sites","reparation law","indigenous peoples","amnesty law","reparations law","Internal armed conflict","Coup","armed forces","authoritarian government","economic crisis","migration"]}
             ]
 
@@ -190,9 +587,6 @@
                 var timeline = TimeData(data, bar)
                 container.append(timeline);
                 
-
-
-
                 // Function that build an instances of timeline collective
                 // retireves data to display and dict of size components
                 // return svg 
@@ -289,7 +683,7 @@
 
                 // link bar to website containg indv country info
                 var links = bars.append("a")
-                    .attr("href", d => "https://polychloras.github.io/" + d.Country)
+                /*    .attr("href", d => "https://polychloras.github.io/" + d.Country)*/
 
                 // add rect reprsenting time duration of events for countries
                 var ind_time = links.append("rect")
@@ -312,8 +706,8 @@
                 // add interactivity to see clicking action and highlight dates on x-axis
                 bars.on("mouseover", mouseO) 
                 bars.on("mouseout", mouseL)
-
-            
+                bars.on("click", click)
+                bars.on("mouseup", clicked)
 // =======================================================================================
 //                 Interactivity Functions
 // ========================================================================================
@@ -342,8 +736,47 @@
                             return (!event.ctrlKey || event.type === 'wheel') && !event.button;
                      }
                 
+                     function click(event, data){
+                         var country = data.Country
+                         var data = data.Events.Dates
+                         console.log(data)
+                         var time_events = svg.append("g")
+                                            .attr("class", "events")
+                                            .raise()
+                                            
+                         time_events
+                                    .selectAll("g")
+                                    .data(data)
+                                    .join(
+                                        enter => enter.append("circle")
+                                        .attr("class", "events")
+                                        .attr("cx", d => x(d))
+                                        .attr("cy", y(country) + bar.height/7)
+                                        .attr("r", bar.width/2)
+                                        .attr("fill", color.event)
+                                        .attr("opacity", 0.45)
+                                        
+                                    )
 
+                        const circ = d3.select(this).select("circle");                  
+                                circ.interrupt() // Stop any active transition
+                                .transition()
+                                .duration(2000)
+                                .ease(d3.easeQuadInOut) 
+                     
+                     }
                 
+
+                     function clicked(event, data){
+                         svg.selectAll(".events").remove()
+
+                         const circ = d3.select(this).select("circle");                  
+                         circ.interrupt() // Stop any active transition
+                         .transition()
+                         .duration(2000)
+                         .ease(d3.easeQuadInOut)  
+                    }
+
                      // determines when mouse is no longer over country time line
                     function mouseL(event, d, i){                  
                             // Hide vertical lines and dates along the timeline
@@ -395,6 +828,10 @@
                     }
 
                     // update_feat: updates timeline to only display countries 
+                    //                  with cooresponding select in Topic/cat
+                    //
+                    // returns nothing
+                      // update_feat: updates timeline to only display countries 
                     //                  with cooresponding select in Topic/cat
                     //
                     // returns nothing
@@ -458,6 +895,7 @@
                             .attr('opacity', 1)
                             .exit()
                             .attr('opacity', 0)
+                            .lower()
                      
 
                         txt.data(data)
@@ -482,11 +920,15 @@
 
 
                         links.data(data)
-                                .attr("href", d => "https://polychloras.github.io/" + d.Country)  
+                               // .attr("href", d => "https://polychloras.github.io/" + d.Country)  
                                 .transition()
                                 .duration(2000) 
                         
-       
+                            const circ = d3.select(this).select("circle");                  
+                            circ.interrupt() // Stop any active transition
+                            .transition()
+                            .duration(2000)
+                            .ease(d3.easeQuadInOut)    
                     }
     
                     function updateAxis(selectedmin, selectedmax){
@@ -533,10 +975,10 @@
                         .exit()
                         .attr('opacity', 0)
                     
-                        links.data(data)
+                       links.data(data)
                                 .transition()
                                 .duration(2000)
-                                .attr("href", d => "https://polychloras.github.io/" + d.Country)
+                             //  .attr("href", d => "https://polychloras.github.io/" + d.Country)
             
                         ind_time
                                 .data(data)
@@ -613,9 +1055,9 @@
                         links.data(data)
                                 .transition()
                                 .duration(500)
-                                .attr("href", d => "https://polychloras.github.io/" + d.Country)
+                              //  .attr("href", d => "https://polychloras.github.io/" + d.Country)
                                 .attr('opacity', 1)
-            
+
                         ind_time.data(data)
                                 .transition()
                                 .duration(500)
@@ -647,7 +1089,7 @@
                             var searching = "Topics"
                             // get option selected
                             const slct_optn = d3.select(this).property("value")
-    
+                            svg.selectAll(".events").remove()
                                 // check if defualt was selected
                             if(slct_optn != "Countries Topic"){
                                 update_feat(slct_optn, searching)
@@ -664,7 +1106,7 @@
                             var searching = "Categories"
                             // get option selected
                             const slct_optn = d3.select(this).property("value")
-    
+                            svg.selectAll(".events").remove()
                                 // check if defualt was selected
                             if(slct_optn != "Keyword"){
                                 update_feat(slct_optn, searching)
@@ -678,7 +1120,7 @@
                     d3.select("#sorting").on('change', function(event, d){
                         // get option selected
                         const slct_optn = d3.select(this).property("value")
-
+                        svg.selectAll(".events").remove()
                         // check if defualt was selected
                         if(slct_optn != "Sort By"){
                             update(slct_optn)
@@ -694,7 +1136,7 @@
                     d3.select('#mindate').on('change', function(event, d){
                         const min = d3.select(this).property("value")
                         const max = d3.select('#maxdate').property("value")
-                       
+                        svg.selectAll(".events").remove()
                                                 // update x-axis
                         updateAxis(min, max)
                     })
@@ -702,6 +1144,7 @@
                     d3.select('#maxdate').on('change', function(event, d){
                         const max = d3.select(this).property("value")
                         const min = d3.select('#mindate').property("value")
+                        svg.selectAll(".events").remove()
                                                 // update x-axis
                        
                         updateAxis(min, max)
