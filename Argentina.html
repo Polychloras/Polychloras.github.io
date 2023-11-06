@@ -22,7 +22,7 @@
         
         // Basic Canvas Information 
         const margin = ({top: 30, bottom: 30, left: 30, right: 30});
-        const bar = ({graphX:100, graphY: 0, graphW: 2000 ,graphH: 60, width: 20, height: 30})
+        const bar = ({graphX:100, graphY: 0, graphW: 2000 ,graphH: 60, width: 20, height: 30, radis: 100})
         const color = ({main: "teal", change: "green", font:"white", back:"lightgrey", event:"orange"})
 
         // Dummy Information to test locally
@@ -73,7 +73,7 @@
         "1985 - Juicio a las Juntas. The high commanders of the military juntas that ran the government during the dictatorship are tried and sentenced for crimes committed during the period."
         ]
         },
-        "Memory Inititives": {
+        "Memory_Inititives": {
         "Dates": [
         1986,
         2002,
@@ -446,20 +446,15 @@
 
         <div id = "title"></div>
         <div id="cat"></div>
-        <p>
-            <b>Categories:</b> Dictatorship; coup; Operation Condor; international armed conflict; truth commission; state museum; memorial sites.
-        </p>
-
-        <p>
-            <b>Actors:</b> Argentine Armed Forces; a diverse spectrum of groups and parties associated with Peronism; social organizations; 
-            guerrilla movements active since the previous decade
-        </p>
-
+        <div id="actor"></div>
         <h1>
              <b>historical events</b>
              <div id = "events"><div>
         </h1>
+        <text>Click on a circle to see Event</text>
         <div id = "eventinfo"></div>
+        <div id = "meminit"></div>
+        <div id = "mem_loc"></div>
         
             
                
@@ -578,38 +573,122 @@
                 const svg = d3.select("#events").append('svg')
                 .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*5]) 
 
+                 //Select div containor and begin adding tieline information
+                 const mem = d3.select("#meminit").append('svg')
+                .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*5]) 
  //======================================================================================
 //  Build Categories
 //=======================================================================================  
-
-                const categ_title =d3.select('#cat')
+                
+                const categ_title = d3.select('#cat')
                                 .append('h1')
                                 .text("Categories")
                                 .append('br')
+                               
 
-                const categ = d3.select('#cat').append('svg')
-                                .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*6])
+                const categ = d3.select('#cat')
+                                .selectAll('ul')
+                                .append('ul')
+                                .data(country.Categories)
+                                .join('li')
+                                    
+
+                categ.append('text').text(d => d)
+ //======================================================================================
+//  Build Actors
+//=======================================================================================  
+               
+const actorlist = d3.select('#actor')
+                                .append('h1')
+                                .text("Actors")
+                                .append('br')
+                               
+
+                const all_acts = d3.select('#actor')
+                                .selectAll('ul')
+                                .append('ul')
+                                .data(country.Actors)
+                                .join('li')
+                                    
+
+                                all_acts.append('text').text(d => d)
+
+
+
+                //create randome locations for categories
+                var rectgls = d3.range(country.Actors.length)
+                                .map(i => ({x:Math.random() * (bar.graphW/2), y:Math.random() * ((bar.graphH + bar.height*10)), index:i}))
+
+                const actor_title =d3.select('#actor')
+                                .append('br')
+                               
+                const actor = d3.select('#actor')
+                                .append('text')
+                                .text("Click and drag the boxes to explore the Actors")
+                                .append('svg')
+                                .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*15])
                            
-                
 
-                var add_cat = categ.append('g')
+                var add_act = actor.append('g')
                                     .selectAll('svg')
-                                    .data(country.Categories)
+                                    .data(country.Actors)
                                     .join('g')
 
-                 add_cat.append('circle')
+                 var rec = add_act.append('rect')
                  .attr('fill', color.main)
-                 .attr('cx', (d, i) => (i+1)*(bar.height+ bar.width+5)*4)
-                 .attr('cy', bar.graphH + bar.height*2)
-                 .attr('r', (bar.height+ bar.width)*2)
+                 .attr('x', (d, i) => rectgls[i].x)
+                 .attr('y',(d,i) => rectgls[i].y)
+                 .attr('width', (d) => d.length*20)
+                 .attr('height', bar.height*2)
 
-                 add_cat.append('text')
-                 .attr('x', (d, i) => (i+1)*(bar.height+ bar.width+5)*3)
-                 .attr('y', bar.graphH + bar.height*2)
+                 add_act.append('text')
+                 .attr('font-size', 30)
+                 .attr('fill', color.font)
+                 .attr('x', (d, i) => rectgls[i].x + 15)
+                 .attr('y', (d, i) => rectgls[i].y + (bar.height*2)/2)
                  .text(d=> d)
                  
 
+               
 
+                function down(event, d){
+                    const select = d3.select(this).select('rect')
+                                    .transition()
+                                    .attr('fill', 'orange')
+                                    .attr('opacity', 0.80)
+                                       
+                }
+
+                function up(event, d){
+                    const select = d3.select(this).select('rect')
+                                    .transition()
+                                    .attr('opacity', 1)
+                                    .attr('fill', color.main)    
+                }
+
+                var drag = d3.drag()
+                    .on('start', dragStart)
+                    .on('drag', dragged)
+                    .on('end', dragend)
+               
+                    function dragStart(event, d){
+                        d3.select(this).transition().attr('fill', 'red')
+                        d3.select(this).on('mousedown', down)
+                    }
+                    function dragged(event, d){
+                        d3.select(this).select('rect').transition().duration(10)
+                        .attr("x",d => event.x + 15).attr("y", d => event.y);
+
+                        d3.select(this).select('text').transition().duration(10)
+                        .attr("x", d => event.x + 15).attr("y", d => event.y + (bar.height*2)/2);
+                    }
+
+                    function dragend(event, d){
+                        d3.select(this).transition().attr('fill', color.main)
+                        d3.select(this).on('mouseup', up)
+                    }
+                    
+                add_act.call(drag)
 //======================================================================================
 //  Build Timeline of Events
 //=======================================================================================
@@ -645,6 +724,80 @@
                //add interactivity action based on mouse clicking
                 events_line.on('mousedown', newclick)
                 events_line.on('click', clicked)
+
+         
+
+//======================================================================================
+//  Build Timeline of Mem Init
+//=======================================================================================
+                var mems_line = mem.append('g')
+                                    .selectAll('g')
+                                    .data(country.Memory_Inititives.Dates)
+                                    .join("g")
+
+                // initlize x axis
+                var max = d3.max(country.Memory_Inititives.Dates)
+                var min = d3.min(country.Memory_Inititives.Dates)
+                
+                // build timeline
+                var y = d3.scaleLinear()
+                .domain([min, max])
+                .range([bar.graphX, bar.graphW]);
+
+                var gy = mem.append("g")
+                .attr("transform", `translate(-50,${bar.graphH + bar.height*4})`)
+                .attr("fill", color.main)
+                .call(d3.axisBottom(y).ticks(10).tickSizeOuter(0)
+                .tickFormat(d3.format(".0f")) // Add this line to change the tick format
+                .tickSizeOuter(0))
+                .attr("font-size", 18)
+                
+                // draw a circle for each event
+                mems_line.append("circle")
+                .attr("cx", d => y(d) - 50)
+                .attr("cy", bar.height*4)
+                .attr("r", 15)
+                .attr("fill", color.main)
+
+                //add interactivity action based on mouse clicking
+           //     mems_line.on('mousedown', newclickmem)
+                mems_line.on('click', clickedmem)
+
+
+
+                function clickedmem(event, d, i){
+                        function find_init(date, country, mem){
+                            var text = ""
+                            var memBox = mem.append("span")
+                            .attr("class", "text")
+                            .attr('font-size', 18)
+                            .attr('font-type', 'bold')
+                            .attr("font-color", color.change)
+
+                            for(let k = 0; k < country.Memory_Inititives.length; k++){
+                                console.log(country.Memory_Inititives.Dates.length)
+                                    if(date == country.Memory_Inititives.Dates[k]){
+                                        memBox.append("text")
+                                        .text(country.Memory_Inititives.Event[k])
+
+                                        memBox.append('br')
+                                        memBox.append('br')
+                                    
+                                    }
+                            }
+                            return text
+
+                        }
+                        var info_init = d3.select('#mem_loc').attr("class", 'text-container')      
+                        var memBox = info_init.append('div')  
+                        find_init(d, country, memBox)
+                        }
+
+
+
+
+
+
 
                 function newclick(event, d){
                     var info = d3.select('#eventinfo').selectAll('div').remove()
@@ -684,8 +837,9 @@
                     var eventbox = info.append('div')  
                     find_Events(d, country, eventbox)
                 }
-                title.append(header.node())
+                //title.append(header.node())
                 events.append(svg.node())
+                meminit.append(mem.node())
               </script>
 
     </body>
