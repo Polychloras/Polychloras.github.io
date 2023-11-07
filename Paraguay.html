@@ -1,8 +1,41 @@
 <!DOCTYPE html>
+/*
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 11/30/2023
+
+Script: This html Document is the home-page into the 12-Countries, 
+        It incorporates a basic map to visulize the girth of time between 
+        these 12 countries in a fast way. 
+        
+        Additionally, the user can filter timelines based on categories or topics 
+        related to that Country.  
+
+
+
+*/    
 <head>
-   
-    <script src="d3.v7.js"></script>
-            </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="d3.v7.js"></script>
+<html lang="en">
+  <style>
+    .timeline-bar {
+        width: 100%;
+        height: 50px;
+        background-color: #a4b1a0;
+    }
+
+    .event {
+        fill:rgb(32, 199, 229);
+        cursor: pointer;
+    }
+
+    .event:hover {
+        fill: rgb(238, 0, 255);
+    }
+</style>
+</head>
+
     <body>
         <h1>
             <b>Paraguay</b>
@@ -16,6 +49,68 @@
             <p>
                 <img src="Paraguay.jpg" alt="Paraguay" width="700" height="500">
             </p>
+            <div class="timeline-bar" id="timeline-bar"></div>
+            <script>
+                const data = [
+                    {
+                        country: 'Paraguay',
+                        events: [
+                            { date: '1954', description: 'In May, Alfredo Stroessner, commander-in-chief of the armed forces, led a coup that overthrew Federico Chávez. A few months later, Stroessner assumed the presidency after running as the only candidate in the elections. The final report of the Comisión Verdad y Justicia lists 9,923 victims of human rights violations during this period (including 2,691 cases of torture, 59 executions and 336 disappearances), as well as 10,167 victims who were not included in the lists reviewed.' },
+                            { date: '1959', description: 'The death of Bernardo Aranda triggers a persecution of homosexuals in the country, known as Case 108.' },
+                            { date: '1973', description: 'The genocide of the Aché people is denounced internationally by Mark Munzel. Since the 1960s, Paraguayan and foreign intellectuals had been denouncing the violence perpetrated against various indigenous peoples. The latter had been victims of illegal land appropriation, sexual violence, enslavement and human trafficking, among other crimes.' },
+                            { date: '1976', description: 'Event known as the "Pascua dolorosa". The regime launched a bloody campaign of repression against peasant movements, mainly the Ligas Agrarias Cristiana in the Misiones province.' },
+                            { date: '1988', description: 'Marcha por la vida. A massive protest demonstration in Asunción on Human Rights Day was repressed by government forces.' },
+                            { date: '1989', description: 'A coup led by General Andrés Rodríguez ends the Stroessner regime as a result of internal strife. The Partido Colorado remained in power.'},
+                            { date: '1992', description: 'Documents from the so-called "Archive of Terror" are discovered.' },
+                            { date: '2006', description: 'The ruling of the Inter-American Court of Human Rights in the case “Goiburú and others vs. Paraguay” set a precedent by recognising the existence of Operation Condor.' },
+                        ]
+                    },
+                    
+                ];
+        
+                const timelineBar = d3.select('#timeline-bar');
+                const width = timelineBar.node().getBoundingClientRect().width;
+                const height = timelineBar.node().getBoundingClientRect().height;
+        
+                const xScale = d3.scaleTime()
+                    .domain([new Date('1950'), new Date('2030')])
+                    .range([0, width]);
+        
+                const svg = timelineBar.append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+        
+                const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
+                svg.selectAll('.year-label')
+                    .data(yearLabels)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', year => xScale(new Date(year, 0, 1)))
+                    .attr('y', 20) // Adjust the vertical position as needed
+                    .text(year => year);
+        
+                const eventsGroup = svg.selectAll('.events-group')
+                    .data(data)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'events-group');
+        
+                eventsGroup.selectAll('.event')
+                    .data(d => d.events)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'event')
+                    .attr('x', d => xScale(new Date(d.date)))
+                    .attr('y', 10)
+                    .attr('width', 10)
+                    .attr('height', 30);
+        
+                // Add tooltips on hover
+                eventsGroup.selectAll('.event')
+                    .append('title')
+                    .text(d => d.description);
+            </script>
             <p>
             <b>Categories:</b>: Dictatorship; coup; Operation Condor; indigenous peoples; reparations law; truth commission; state museum; memorial sites.
             </p>
@@ -27,8 +122,7 @@
              <b>historical events</b>
              </h1>
              <p>
-            1954 : In May, Alfredo Stroessner, commander-in-chief of the armed forces, led a coup that overthrew Federico Chávez. A few months later, Stroessner assumed the presidency after running as the only candidate in the elections.
-            The final report of the Comisión Verdad y Justicia lists 9,923 victims of human rights violations during this period (including 2,691 cases of torture, 59 executions and 336 disappearances), as well as 10,167 victims who were not included in the lists reviewed. 
+            1954 : In May, Alfredo Stroessner, commander-in-chief of the armed forces, led a coup that overthrew Federico Chávez. A few months later, Stroessner assumed the presidency after running as the only candidate in the elections. The final report of the Comisión Verdad y Justicia lists 9,923 victims of human rights violations during this period (including 2,691 cases of torture, 59 executions and 336 disappearances), as well as 10,167 victims who were not included in the lists reviewed. 
             </p>
             <p>
             1959 :The death of Bernardo Aranda triggers a persecution of homosexuals in the country, known as Case 108.
