@@ -1030,6 +1030,7 @@
             <br></br>
             <br></br>
             <div id ="issue"></div>
+            <div></div>
               
 </body>
 
@@ -1075,7 +1076,7 @@
                 .append('br')
                 .append('g')
                 .append('h2')
-                .text('Main Topics from ('+ country.Start_Date + '-' + country.End_Date + '): ')
+                .text('Main Topics from ('+ country.Start_Date + '- Current): ')
                 .selectAll()
                 .data(country.Topics)
                 .join('ul')
