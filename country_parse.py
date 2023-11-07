@@ -74,7 +74,7 @@ class country():
             self.sites.update({topic_summ[0]: topic_summ[1]})
     
      def set_orgs(self, listed, c):
-          d = listed.index('Issues specific to the country')
+          d = listed.index('Issues_specific_to_the_country')
           for i in listed[c:d]:
                self.set_orgsinfo(i)
           return d
@@ -118,8 +118,8 @@ class country():
      
      def add_country(self):
           self.table.update({'Events': self.get_time()})
-          self.table.update({'Memory Inititives': self.get_mem()})
-          self.table.update({'Sites of Memory': self.get_memsites()})
+          self.table.update({'Memory_Inititives': self.get_mem()})
+          self.table.update({'Sites_of_Memory': self.get_memsites()})
           self.table.update({'Organizations': self.get_orgs()})
           return self.table
 
