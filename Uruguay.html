@@ -1,8 +1,39 @@
+/*
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 11/30/2023
+
+Script: This html Document is the home-page into the 12-Countries, 
+        It incorporates a basic map to visulize the girth of time between 
+        these 12 countries in a fast way. 
+        
+        Additionally, the user can filter timelines based on categories or topics 
+        related to that Country.  
+*/ 
 <!DOCTYPE html>
+   
 <head>
    
-    <script src="d3.v7.js"></script>
-            </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="d3.v7.js"></script>
+<html lang="en">
+  <style>
+    .timeline-bar {
+        width: 100%;
+        height: 50px;
+        background-color: #a4b1a0;
+    }
+
+    .event {
+        fill:rgb(32, 199, 229);
+        cursor: pointer;
+    }
+
+    .event:hover {
+        fill: rgb(238, 0, 255);
+    }
+</style>
+</head>
     <body>
         <h1>
             <b>Uruguay</b>
@@ -16,6 +47,68 @@
             <p>
                 <img src="Uruguay.jpg" alt="Uruguay" width="700" height="500">
             </p>
+            <div class="timeline-bar" id="timeline-bar"></div>
+            <script>
+                const data = [
+                    {
+                        country: 'Uruguay',
+                        events: [
+                            { date: '1973', description: 'The conservative and liberal parties of Colombia establish the Frente Nacional. This agreement involved alternance in power, but solely between these two parties. It lasted until 1974.' },
+                            { date: '1976', description: 'The guerrilla organisations Ejército de Liberación Nacional (ELN) and the Fuerzas Armadas Revolucionarias de Colombia (FARC) were formed.' },
+                            { date: '1976', description: 'The government issued Decree 3398 (turned Law 48 in 1968) that allowed the formation of armed forces among the civilian population. It will be declared unconstitutional in 1989.' },
+                            { date: '1980', description: 'The guerrilla organisation Ejército Popular de Liberación (EPL) was founded.' },
+                            { date: '1983', description: 'The guerrilla organisation Movimiento 19 de Abril (M-19) was formed.' },
+                            { date: '1984', description: 'OParo cívico nacional. On 14 September, a national strike against the government broke out. Following several years of demonstrations, this one was the largest that the country had ever seen.'},
+                            { date: '1985', description: 'The government issued Decreto 1923, establishing the Estatuto de Seguridad. It increased the punitive attributions of state organisms, which led to human rights violations.' },
+                            { date: '1985', description: 'On 30 March, the first Foro Nacional de Derechos Humanos takes place. As a result, the Comité Permanente por la Defensa de los Derechos Humanos (CPDH) was created.' },
+                        ]
+                    },
+                    
+                ];
+        
+                const timelineBar = d3.select('#timeline-bar');
+                const width = timelineBar.node().getBoundingClientRect().width;
+                const height = timelineBar.node().getBoundingClientRect().height;
+        
+                const xScale = d3.scaleTime()
+                    .domain([new Date('1950'), new Date('2030')])
+                    .range([0, width]);
+        
+                const svg = timelineBar.append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+        
+                const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
+                svg.selectAll('.year-label')
+                    .data(yearLabels)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', year => xScale(new Date(year, 0, 1)))
+                    .attr('y', 20) // Adjust the vertical position as needed
+                    .text(year => year);
+        
+                const eventsGroup = svg.selectAll('.events-group')
+                    .data(data)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'events-group');
+        
+                eventsGroup.selectAll('.event')
+                    .data(d => d.events)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'event')
+                    .attr('x', d => xScale(new Date(d.date)))
+                    .attr('y', 10)
+                    .attr('width', 10)
+                    .attr('height', 30);
+        
+                // Add tooltips on hover
+                eventsGroup.selectAll('.event')
+                    .append('title')
+                    .text(d => d.description);
+            </script>
             <p>
             <b>Categories:</b>:Dictatorship; coup; Operation Condor; amnesty law; reparation law; truth commission; state museum; memorial sites.
             </p>
@@ -26,16 +119,13 @@
             <b>historical events</b>
             </h1>
             <p>
-            1973 : The conservative and liberal parties of Colombia establish the Frente Nacional. This agreement involved 
-            alternance in power, but solely between these two parties. It lasted until 1974.
+            1973 : The conservative and liberal parties of Colombia establish the Frente Nacional. This agreement involved alternance in power, but solely between these two parties. It lasted until 1974.
             </p>
             <p>
-            1976 : The guerrilla organisations Ejército de Liberación Nacional (ELN) and the Fuerzas Armadas Revolucionarias 
-            de Colombia (FARC) were formed.
+            1976 : The guerrilla organisations Ejército de Liberación Nacional (ELN) and the Fuerzas Armadas Revolucionarias de Colombia (FARC) were formed.
             </p>
             <p>
-            1976 : The government issued Decree 3398 (turned Law 48 in 1968) that allowed the formation of armed forces among
-             the civilian population. It will be declared unconstitutional in 1989.
+            1976 : The government issued Decree 3398 (turned Law 48 in 1968) that allowed the formation of armed forces among the civilian population. It will be declared unconstitutional in 1989.
             </p>
             <p>
             1980 : The guerrilla organisation Ejército Popular de Liberación (EPL) was founded. 
@@ -44,15 +134,12 @@
             1983 :The guerrilla organisation Movimiento 19 de Abril (M-19) was formed. 
             </p>
             <p>
-            1984 : OParo cívico nacional. On 14 September, a national strike against the government broke out. Following 
-            several years of demonstrations, this one was the largest that the country had ever seen.
+            1984 : OParo cívico nacional. On 14 September, a national strike against the government broke out. Following several years of demonstrations, this one was the largest that the country had ever seen.
             </p>
             <p>
-            1985 : The government issued Decreto 1923, establishing the Estatuto de Seguridad. It increased the punitive 
-            attributions of state organisms, which led to human rights violations.
+            1985 : The government issued Decreto 1923, establishing the Estatuto de Seguridad. It increased the punitive attributions of state organisms, which led to human rights violations.
             <p>
-            1985 : On 30 March, the first Foro Nacional de Derechos Humanos takes place. As a result, the Comité Permanente 
-            por la Defensa de los Derechos Humanos (CPDH) was created.
+            1985 : On 30 March, the first Foro Nacional de Derechos Humanos takes place. As a result, the Comité Permanente por la Defensa de los Derechos Humanos (CPDH) was created.
             </p>
             <p>
             <b>Memory initiatives</b>

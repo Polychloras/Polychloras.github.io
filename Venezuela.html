@@ -1,8 +1,39 @@
+/*
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 11/30/2023
+
+Script: This html Document is the home-page into the 12-Countries, 
+        It incorporates a basic map to visulize the girth of time between 
+        these 12 countries in a fast way. 
+        
+        Additionally, the user can filter timelines based on categories or topics 
+        related to that Country.  
+*/ 
 <!DOCTYPE html>
+   
 <head>
    
-    <script src="d3.v7.js"></script>
-            </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="d3.v7.js"></script>
+<html lang="en">
+  <style>
+    .timeline-bar {
+        width: 100%;
+        height: 50px;
+        background-color: #a4b1a0;
+    }
+
+    .event {
+        fill:rgb(32, 199, 229);
+        cursor: pointer;
+    }
+
+    .event:hover {
+        fill: rgb(238, 0, 255);
+    }
+</style>
+</head>
     <body>
         <h1>
             <b>Venezuela</b>
@@ -16,6 +47,74 @@
             <p>
                 <img src="Venezuela.jpg" alt="Venezuela" width="700" height="500">
             </p>
+            <div class="timeline-bar" id="timeline-bar"></div>
+            <script>
+                const data = [
+                    {
+                        country: 'Venezuela',
+                        events: [
+                            { date: '1989', description: 'A military junta led by general René Barrientos overthrew Víctor Paz Estenssoro and took control of the government.' },
+                            { date: '1992', description: 'Masacre de San Juan. In June, during the celebration of the night of San Juan, military troops invaded the mining camps of Catavi, killing workers and their families.' },
+                            { date: '1993', description: 'After the death of Barrientos, general Alfredo Ovando took over the government, followed by general Juan José Torres.' },
+                            { date: '1994', description: 'Masacre del Valle. The government sends in the army to repress peasant protests in Cochabamba. Groups of peasants are murdered in different places in the region.' },
+                            { date: '1999', description: 'Moema Viezzer published Si me permiten hablar, a testimony by Domitila Barrios de Chungara, a miner, political leader,and survivor of the San Juan massacre.' },
+                            { date: '2001', description: 'After Banzer departure, a series of calls for elections and military coups occurred in the following years.'},
+                            { date: '2002', description: 'Masacre de Todos Santos. At the beginning of November, Colonel Alberto Natusch leads a coup détat. Numerous protests follow, which are violently suppressed by the army.' },
+                            { date: '2007', description: 'The priest Luis Espinal, who had actively denounced the repression and corruption of the government forces,is tortured and murdered by them.' },
+                            { date: '2012', description: 'In July, General Luis García Meza and Colonel Luis Arce stage a coup détat. Violent repression is unleashed against the population. Political leaders Marcelo Quiroga and Carlos Flores were murdered, and their bodies disappeared. Quiroga had promoted a trial to bring Banzer to justice.' },
+                            { date: '2013', description: 'A presidential election was held after Chávez’s death. Nicolás Maduro was elected president. The results of the election were contested by parts of the opposition and protests broke out.' },
+                            { date: '2014', description: 'Numerous protests against the Maduro government and the living conditions of the population took place throughout the year and were repressed by the government.' },
+                            { date: '2017', description: 'In April, a wave of protests broke out across the country following some government measures concerning the legislative body, the Asamblea Nacional. These were violently repressed by the state, but continued until July of that year.' },
+                            { date: '2019', description: 'In January, as Nicolás Maduro was about to be inaugurated for another term, his appointment was questioned by various groups. The Asamblea Nacional nominated Juan Guaidó as interim president. Subsequently, a series of mass protests broke out across the country and continued throughout the year.' },
+
+                        ]
+                    },
+                    
+                ];
+        
+                const timelineBar = d3.select('#timeline-bar');
+                const width = timelineBar.node().getBoundingClientRect().width;
+                const height = timelineBar.node().getBoundingClientRect().height;
+        
+                const xScale = d3.scaleTime()
+                    .domain([new Date('1950'), new Date('2030')])
+                    .range([0, width]);
+        
+                const svg = timelineBar.append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+        
+                const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
+                svg.selectAll('.year-label')
+                    .data(yearLabels)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', year => xScale(new Date(year, 0, 1)))
+                    .attr('y', 20) // Adjust the vertical position as needed
+                    .text(year => year);
+        
+                const eventsGroup = svg.selectAll('.events-group')
+                    .data(data)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'events-group');
+        
+                eventsGroup.selectAll('.event')
+                    .data(d => d.events)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'event')
+                    .attr('x', d => xScale(new Date(d.date)))
+                    .attr('y', 10)
+                    .attr('width', 10)
+                    .attr('height', 30);
+        
+                // Add tooltips on hover
+                eventsGroup.selectAll('.event')
+                    .append('title')
+                    .text(d => d.description);
+            </script>
             <p>
             <b>Categories:</b>:Coup; armed forces; authoritarian government; economic crisis; migration.
             </p>
@@ -66,39 +165,7 @@
             2017 :In April, a wave of protests broke out across the country following some government measures concerning the legislative body, the Asamblea Nacional. These were violently repressed by the state, but continued until July of that year.   
             </p>
             <p>
-            2019 : In January, as Nicolás Maduro was about to be inaugurated for another term, his appointment was questioned by various groups. The Asamblea Nacional nominated Juan Guaidó as interim president. Subsequently, a series of mass protests broke out across the country and continued throughout the year.
-            </p>
-            <p>
-            1997 : A series of preexisting paramilitary groups were merged to form the Autodefensas Unidas de Colombia (AUC).
-             In the next years this group will violently spread its presence throughout the country.   
-            </p>
-            <p>
-            1997 : Mandato Ciudadano por la Paz, la Vida y la Libertad. While the violence of the armed conflict was rising,
-             an initiative led by Colombian citizens demanded a non-violent resolution to the conflict.    
-            </p>
-            <p>
-            1999 : “Plan Colombia”. An agreement between the governments of Colombia and the US to combat drug trafficking 
-            leads to increased financial support and military presence by the latter.   
-            </p>
-            <p>
-            2003 : During Álvaro Uribe’s presidency, the government increased its military operations against the FARC,
-             as part of the “Plan Patriota”. The increased violence had dire effects on the human rights of the civil population.   
-            </p>
-            <p>
-            2003:Following negotiations with the government, the AUC started a demobilisation process, although violent 
-            actions by paramilitary groups continued. 
-            </p>
-            <p>
-            2008 : Case “Falsos Positivos”. A public scandal broke out after the revelation that, from around 2002 onwards,
-             thousands of civilians were killed by the army and presented as enemy combatants.   
-            </p>
-            <p>
-            2012 : Peace talks between the government and the FARC began in the city of La Habana, Cuba.  
-            </p>
-            <p>
-            2016 : Acuerdo Final para la Terminación del Conflicto y la Construcción de una Paz Estable y Duradera. 
-            On 26 September, the Colombian government and the FARC signed a peace agreement. Following a referendum,
-             a revised agreement was signed on 24 November.   
+            2019 :In January, as Nicolás Maduro was about to be inaugurated for another term, his appointment was questioned by various groups. The Asamblea Nacional nominated Juan Guaidó as interim president. Subsequently, a series of mass protests broke out across the country and continued throughout the year.
             </p>
             <p>
             <b>Organisations</b>

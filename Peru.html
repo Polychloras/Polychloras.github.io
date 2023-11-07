@@ -1,8 +1,38 @@
+/*
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 11/30/2023
+
+Script: This html Document is the home-page into the 12-Countries, 
+        It incorporates a basic map to visulize the girth of time between 
+        these 12 countries in a fast way. 
+        
+        Additionally, the user can filter timelines based on categories or topics 
+        related to that Country.  
+*/ 
 <!DOCTYPE html>
-<head>
    
-    <script src="d3.v7.js"></script>
-            </head>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="d3.v7.js"></script>
+<html lang="en">
+  <style>
+    .timeline-bar {
+        width: 100%;
+        height: 50px;
+        background-color: #a4b1a0;
+    }
+
+    .event {
+        fill:rgb(32, 199, 229);
+        cursor: pointer;
+    }
+
+    .event:hover {
+        fill: rgb(238, 0, 255);
+    }
+</style>
+</head>
     <body>
         <h1>
             <b>Peru</b>
@@ -16,6 +46,74 @@
             <p>
                 <img src="Peru.jpg" alt="Peru" width="700" height="500">
             </p>
+            <div class="timeline-bar" id="timeline-bar"></div>
+            <script>
+                const data = [
+                    {
+                        country: 'Peru',
+                        events: [
+                            { date: '1980', description: 'An attack by Sendero Luminoso guerrillas on the electoral headquarters in Chuschi, Ayacucho region, marked the beginning of the internal armed conflict. The attack took place on the eve of the first presidential elections after twelve years of military ' },
+                            { date: '1983', description: ' Eight journalists, a guide and a community member were murdered in the community of Uchuraccay. An investigatory commission was set up. In the following months, the community was attacked by Sendero Luminoso and anti-subversive groups.' },
+                            { date: '1983', description: 'Masacre de Lucanamarca. Sendero Luminoso troops attacked the district of Santiago de Lucanamarca and killed 69 people.' },
+                            { date: '1983', description: 'Police forces tortured and killed 32 people in the community of Socos, Ayacucho.' },
+                            { date: '1984', description: 'Moema Viezzer published Si me permiten hablar, a testimony by Domitila Barrios de Chungara, a miner, political leader,and survivor of the San Juan massacre.' },
+                            { date: '1985', description: 'Masacre de Accomarca. Army troops assassinated 69 peasants in the district of Accomarca in Ayacucho.'},
+                            { date: '1989', description: 'Sendero Luminoso forces attacked the police station in Uchiza, Ayacucho, and looted the town.' },
+                            { date: '1992', description: 'Alberto Fujimoris self-coup. On 5 April, with the support of the armed forces, Fujimori dissolved Congress and intervened in other state bodies, taking total control of the government.' },
+                            { date: '1992', description: 'Sendero Luminoso staged a car bombing on Tarata Avenue in Limas Miraflores district, killing 25 people and wounding another 155.' },
+                            { date: '1992', description: 'Masacre de la Cantuta. Paramilitaries from the Colina group attacked the Universidad Enrique Guzmán y Valle, killing nine students and a professor, who were buried in clandestine graves.' },
+                            { date: '1992', description: 'Abimael Guzmán, leader of Sendero Luminoso, was captured in September.'},
+                            { date: '1996', description: 'Members of the MRTA stormed the Japanese embassy in Lima. They held dozens of hostages for four months.' },
+                            { date: '1998', description: 'Matanza del valle de Tsiriari. An armed group attacked several communities in the Tsiriari Valley in the Junínn region and massacred the local population.' },
+                            { date: '2000', description: 'During a political crisis, Fujimori resigns as president and is impeached by Congress.' },
+                        ]
+                    },
+                    
+                ];
+        
+                const timelineBar = d3.select('#timeline-bar');
+                const width = timelineBar.node().getBoundingClientRect().width;
+                const height = timelineBar.node().getBoundingClientRect().height;
+        
+                const xScale = d3.scaleTime()
+                    .domain([new Date('1950'), new Date('2030')])
+                    .range([0, width]);
+        
+                const svg = timelineBar.append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+        
+                const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
+                svg.selectAll('.year-label')
+                    .data(yearLabels)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', year => xScale(new Date(year, 0, 1)))
+                    .attr('y', 20) // Adjust the vertical position as needed
+                    .text(year => year);
+        
+                const eventsGroup = svg.selectAll('.events-group')
+                    .data(data)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'events-group');
+        
+                eventsGroup.selectAll('.event')
+                    .data(d => d.events)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'event')
+                    .attr('x', d => xScale(new Date(d.date)))
+                    .attr('y', 10)
+                    .attr('width', 10)
+                    .attr('height', 30);
+        
+                // Add tooltips on hover
+                eventsGroup.selectAll('.event')
+                    .append('title')
+                    .text(d => d.description);
+            </script>
             <p>
             <b>Categories:</b>: Internal armed conflict; indigenous peoples; truth commission; reparations law; state museum; memorial sites.
             </p>
