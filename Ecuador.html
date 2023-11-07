@@ -1006,6 +1006,7 @@
     </script>
             </head>
 <body>
+    <body>
             <div id = "title"></div>
             <div id = "links"></div>
             <div id="title2"></div>
@@ -1029,7 +1030,7 @@
             <br></br>
             <div id ="issue"></div>
             <div></div>
-              
+        </body>      
 
 <script  type="module">
 
@@ -1111,10 +1112,11 @@
      const mem = d3.select("#meminit").append('svg')
     .attr("viewBox", [0, 0, bar.graphW, bar.graphH + bar.height*5]) 
 
+
 //======================================================================================
 //  Build Links and Summary
 //=======================================================================================    
-    const navbar = d3.select("#links")
+const navbar = d3.select("#links")
     .append('nav')
     
  
