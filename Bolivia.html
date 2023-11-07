@@ -8,11 +8,11 @@
     .timeline-bar {
         width: 100%;
         height: 50px;
-        background-color: #0b8375;
+        background-color: #43e313;
     }
 
     .event {
-        fill:rgb(178, 235, 169);
+        fill:rgb(32, 199, 229);
         cursor: pointer;
     }
 
@@ -35,6 +35,7 @@
         <p>
           <img src="Bolivia.jpg" alt="Bolivia" width="600" height="500">
         </p>
+        
         <div class="timeline-bar" id="timeline-bar"></div>
     <script>
         const data = [
@@ -96,7 +97,7 @@
 
         // Add tooltips on hover
         eventsGroup.selectAll('.event')
-            .append('Key historical events')
+            .append('title')
             .text(d => d.description);
     </script>
         <p>
