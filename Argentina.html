@@ -49,8 +49,8 @@
    "social organizations",
    "guerrilla movements active since the previous decade"
   ],
-  "Summary": "meh",
-  "Links": ["blah"],
+  "Summary": "",
+  "Links": ["tada"],
   "Events": {
    "Dates": [
     1973,
@@ -1016,7 +1016,7 @@
         <div id="actor"></div>
         <h2>Timeline of Historical Events</h2>
         <h3>click on circle to see event</h3>
-        <h3><div id = "events"><div></h3>
+        <h3><div id = "events"></div></h3>
         <div id = "eventinfo"></div>
 
         <h2>Timeline of Memory Inititives</h2>
@@ -1026,9 +1026,9 @@
         <div id = "mem_site"></div>
         <div id = "orgs"></div>
 
-        <div id ="issue">
+        <div id ="issue"></div>
         
-              <script  type="module">
+<script  type="module">
 
                
                 const data = await d3.json("12Data.json")
@@ -1127,8 +1127,8 @@
                 .attr('href', "https://polychloras.github.io/MasterTimeline")
                 .text('Home').selectAll()
 
-                
-                navlink.data(country.Links)
+
+                navlink.selectAll().data(country.Links)
                 .join('ul')
                 .append('li')
                 .append('a')
