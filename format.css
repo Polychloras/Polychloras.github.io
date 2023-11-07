@@ -17,7 +17,7 @@ a{
     color: rgb(47, 89, 228);
 }
 
-ul{
+nav ul{
     list-style-type: none;
     margin : 0;
     padding : 0;
@@ -28,7 +28,14 @@ ul{
 
 li{
     float: left;
+    list-style-type: none;
+    padding-right: 15px;
 }
+
+ul li{
+    padding-right: 15px;
+}
+
 li a {
     display:block;
     color:brown;

@@ -7,8 +7,10 @@ class country():
           self.table = {}
           self.timeline = {}
           self.meminit = {}
-          self.sites = {}
-          self.orgs = {}
+          self.sites = []
+          self.orgs = []
+          self.issue = []
+          self.links = []
 
      def set_listed_vals(self, strg, name):
         name_vals = strg.split(':')
@@ -35,7 +37,8 @@ class country():
         c = self.set_meminit(listed, b+1)
         d = self.set_sites(listed, c+1)
         e = self.set_orgs(listed, d+1)
-        self.table.update({'Issues specific to the country': listed[e+1:]})
+        f = self.set_iss(listed, e+1)
+        self.table.update({'Links': listed[f+1:]})
 
      def set_events(self, listed, a):
           b = listed.index('Memory initiatives')
@@ -71,17 +74,26 @@ class country():
      
      def set_sitesinfo(self, strg):
             topic_summ = strg.split(':')
-            self.sites.update({topic_summ[0]: topic_summ[1]})
+            self.sites.append(topic_summ[0] +': ' + topic_summ[1])
     
      def set_orgs(self, listed, c):
-          d = listed.index('Issues_specific_to_the_country')
+          d = listed.index('Issues specific to the country')
           for i in listed[c:d]:
                self.set_orgsinfo(i)
           return d
 
      def set_orgsinfo(self, strg):
             topic_summ = strg.split(':')
-            self.orgs.update({topic_summ[0]: topic_summ[1]})
+            self.orgs.append(topic_summ[0] +": " + topic_summ[1])
+
+     def set_iss(self, listed, c):
+          d = listed.index('Links')
+          for i in listed[c:d]:
+               self.set_issinfo(i)
+          return d
+
+     def set_issinfo(self, strg):
+            self.issue.append(strg)
 
      def set_dates(self, strg):
             strg = strg.lower().strip()
@@ -116,11 +128,15 @@ class country():
      def get_orgs(self):
           return self.orgs
      
+     def get_issue(self):
+          return self.issue
+     
      def add_country(self):
           self.table.update({'Events': self.get_time()})
           self.table.update({'Memory_Inititives': self.get_mem()})
           self.table.update({'Sites_of_Memory': self.get_memsites()})
           self.table.update({'Organizations': self.get_orgs()})
+          self.table.update({'Issues':self.get_issue()})
           return self.table
 
 def remove_all(list_top, char):
