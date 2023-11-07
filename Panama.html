@@ -1,7 +1,38 @@
 <!DOCTYPE html>
+/*
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 11/30/2023
+
+Script: This html Document is the home-page into the 12-Countries, 
+        It incorporates a basic map to visulize the girth of time between 
+        these 12 countries in a fast way. 
+        
+        Additionally, the user can filter timelines based on categories or topics 
+        related to that Country.  
+
+
+
+*/   
 <head>
    
     <script src="d3.v7.js"></script>
+    <style>
+        .timeline-bar {
+            width: 100%;
+            height: 50px;
+            background-color: #eef5ec;
+        }
+    
+        .event {
+            fill:rgb(32, 199, 229);
+            cursor: pointer;
+        }
+    
+        .event:hover {
+            fill: rgb(238, 0, 255);
+        }
+    </style>
             </head>
     <body>
         <h1>
@@ -16,6 +47,72 @@
             <p>
                 <img src="Panama.jpg" alt="Panama" width="700" height="500">
             </p>
+            <div class="timeline-bar" id="timeline-bar"></div>
+            <script>
+                const data = [
+                    {
+                        country: 'Panama',
+                        events: [
+                            { date: '1968', description: 'On October 11, forces of the Guardia Nacional effected a coup d’état, deposing elected president Arnulfo Arias. The main legislative body, the Asamblea Nacional, was closed. Civil and political rights were restricted, and many citizens were violently persecuted.' },
+                            { date: '1969', description: 'General Omar Torrijos took control of the government.' },
+                            { date: '1970', description: ' Union leader Heliodoro Portugal was detained by the armed forces, killed, and his body forcibly disappeared. ' },
+                            { date: '1971', description: 'Colombian priest Jesús Héctor Gallego was kidnaped in the Veraguas province by members of the Guardia Nacional. He was then killed and forcibly disappeared.' },
+                            { date: '1977', description: 'A delegation from the Inter-American Commission on Human Rights visited Panama. A report on human rights situation was produced in 1978.' },
+                            { date: '1981', description: ' General Torrijos died in an accident.'},
+                            { date: '1983', description: ' Manuel Antonio Noriega took control of the armed forces and de facto control of the government. The Guardia Nacional became the Fuerzas de Defensa, increasing its size and budget.' },
+                            { date: '1985', description: 'Physician and guerrilla Hugo Spadafora was tortured, killed, and beheaded by agents of the Fuerzas de Defensa. Spadafora had openly criticised Noriega who, in response, arranged the former’s killing. Protests spark across the country.' },
+                            { date: '1987', description: 'Mass protests against the Noriega regime occured in Panama. The organisation known as Cruzada Civilista led the calls to protest, which were violently repressed by the government.' },
+                            { date: '1989', description: 'Albrook Massacre. Sectors of the armed forces attempted a coup against Noriega. The leaders of the uprising were subsequently tortured and killed.' },
+                            { date: '1989', description: 'on December 20, troops of the U.S. invaded Panama, under command of the George H.W. Bush administration. Hundreds of Panamanian citizens were killed, and the cities were looted.Noriega was captured by U.S. forces and prosecuted abroad for drug trafficking.' },
+                            { date: '1989', description: 'While Panama was still under U.S. occupation, Guillermo Endara became president, based on the results of the last held election.' },
+                        ]
+                    },
+                    
+                ];
+        
+                const timelineBar = d3.select('#timeline-bar');
+                const width = timelineBar.node().getBoundingClientRect().width;
+                const height = timelineBar.node().getBoundingClientRect().height;
+        
+                const xScale = d3.scaleTime()
+                    .domain([new Date('1950'), new Date('2030')])
+                    .range([0, width]);
+        
+                const svg = timelineBar.append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+        
+                const yearLabels = d3.range(1950, 2030, 5); // Labels for every 5 years
+                svg.selectAll('.year-label')
+                    .data(yearLabels)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'year-label')
+                    .attr('x', year => xScale(new Date(year, 0, 1)))
+                    .attr('y', 20) // Adjust the vertical position as needed
+                    .text(year => year);
+        
+                const eventsGroup = svg.selectAll('.events-group')
+                    .data(data)
+                    .enter()
+                    .append('g')
+                    .attr('class', 'events-group');
+        
+                eventsGroup.selectAll('.event')
+                    .data(d => d.events)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'event')
+                    .attr('x', d => xScale(new Date(d.date)))
+                    .attr('y', 10)
+                    .attr('width', 10)
+                    .attr('height', 30);
+        
+                // Add tooltips on hover
+                eventsGroup.selectAll('.event')
+                    .append('title')
+                    .text(d => d.description);
+            </script>
             <p>
             <b>Categories:</b>:Dictatorship; coup; Operation Condor; international armed conflict; truth commission.
             </p>
@@ -53,11 +150,10 @@
             1987 : Mass protests against the Noriega regime occured in Panama. The organisation known as Cruzada Civilista led the calls to protest, which were violently repressed by the government. 
             </p>
             <p>
-            1989 Albrook Massacre. Sectors of the armed forces attempted a coup against Noriega. The leaders of the uprising were subsequently tortured and killed.
+            1989 : Albrook Massacre. Sectors of the armed forces attempted a coup against Noriega. The leaders of the uprising were subsequently tortured and killed.
             </p>
             <p>
-            1989 : On December 20, troops of the U.S. invaded Panama, under command of the George H.W. Bush administration. Hundreds of Panamanian citizens were killed, and the cities were looted.
-            Noriega was captured by U.S. forces and prosecuted abroad for drug trafficking. 
+            1989 : On December 20, troops of the U.S. invaded Panama, under command of the George H.W. Bush administration. Hundreds of Panamanian citizens were killed, and the cities were looted.Noriega was captured by U.S. forces and prosecuted abroad for drug trafficking. 
                
             </p>
             <p>
