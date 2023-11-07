@@ -1124,13 +1124,14 @@ const navbar = d3.select("#links")
 const navlink =  navbar
     .append('ul')
 
-    navlink
-    .append('li')
-    .append('a')
-    .attr('float', 'left')
-    .attr('background-color', 'red')
-    .attr('href', "https://polychloras.github.io/MasterTimeline")
-    .text('Home').selectAll()
+
+const home = navlink
+                    .append('li')
+                    .append('a')
+                    .attr('float', 'left')
+                    .attr('background-color', 'red')
+                    .attr('href', "https://polychloras.github.io/MasterTimeline")
+                    .text('Home').selectAll()
 
 
     navlink.data(country.Links)
