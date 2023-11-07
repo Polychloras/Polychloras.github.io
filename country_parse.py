@@ -2,6 +2,19 @@ import os
 import string
 import json
 
+'''
+Name(s): Emily Massie, Mehrdad Yadholli
+Project Goal: Build a Website in D3 to visulize information on 12 South American Countries
+Date: 10/30/2023
+
+Script: This python file reads each of the tweleve documents and 
+organizes the information before placing it into a json file for html use
+
+
+'''
+# Country
+# Creates one instance of a country
+#
 class country():
      def __init__(self):
           self.table = {}
@@ -12,6 +25,7 @@ class country():
           self.issue = []
           self.links = []
 
+     # Organze Actors and Categories
      def set_listed_vals(self, strg, name):
         name_vals = strg.split(':')
         vals = name_vals[1].replace('.', '')
@@ -20,6 +34,7 @@ class country():
              vals[val] = vals[val].lower().strip()
         self.table.update({name: vals})
 
+     # add all information to class
      def add_vals(self, listed):
         self.name = listed[0]
         self.table.update({'Country': self.name})
@@ -27,19 +42,22 @@ class country():
         self.set_listed_vals(listed[2], 'Categories')
         self.set_listed_vals(listed[3], 'Actors')
         
-        
+      # read in summary and historical events  
         if(listed[4] == 'Key historical events'):
              self.table.update({'Summary':""})
              b = self.set_events(listed, 5)
         else:
              self.table.update({'Summary':listed[4]})
              b = self.set_events(listed, 6)
+
+     # set all other information based on header location
         c = self.set_meminit(listed, b+1)
         d = self.set_sites(listed, c+1)
         e = self.set_orgs(listed, d+1)
         f = self.set_iss(listed, e+1)
         self.table.update({'Links': listed[f+1:]})
 
+     # organize events
      def set_events(self, listed, a):
           b = listed.index('Memory initiatives')
           event_date = []
@@ -52,6 +70,7 @@ class country():
                  self.timeline.update({"Events":event_desc})
           return b
 
+     # organize memory inititives
      def set_meminit(self, listed, b):
           c = listed.index('Sites of memory')
           events = []
@@ -66,26 +85,31 @@ class country():
                
           return c       
 
+     # get all momory sites
      def set_sites(self, listed, c):
           d = listed.index('Organisations')
           for i in listed[c:d]:
                self.set_sitesinfo(i)
           return d
      
+     # organize each site
      def set_sitesinfo(self, strg):
             topic_summ = strg.split(':')
             self.sites.append(topic_summ[0] +': ' + topic_summ[1])
     
+    # get all organizations
      def set_orgs(self, listed, c):
           d = listed.index('Issues specific to the country')
           for i in listed[c:d]:
                self.set_orgsinfo(i)
           return d
 
+     # set each organiization into file
      def set_orgsinfo(self, strg):
             topic_summ = strg.split(':')
             self.orgs.append(topic_summ[0] +": " + topic_summ[1])
 
+     # set issues specific to country
      def set_iss(self, listed, c):
           d = listed.index('Links')
           for i in listed[c:d]:
@@ -95,6 +119,7 @@ class country():
      def set_issinfo(self, strg):
             self.issue.append(strg)
 
+     # set the dates and topic from document header
      def set_dates(self, strg):
             strg = strg.lower().strip()
             topic_date = strg.split('(')
@@ -113,6 +138,7 @@ class country():
             self.table.update({'Start_Date': int(start)})
             self.table.update({'End_Date': int(end)})
 
+#------- Getter Functions --------------------------------------
      def get_time(self):
           return self.timeline
      
@@ -131,6 +157,7 @@ class country():
      def get_issue(self):
           return self.issue
      
+     # return all country values
      def add_country(self):
           self.table.update({'Events': self.get_time()})
           self.table.update({'Memory_Inititives': self.get_mem()})
